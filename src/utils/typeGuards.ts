@@ -1,6 +1,6 @@
 import { Picture, User } from "../features/users/types";
 import { LoginResponseDTO } from "../features/authentication/types";
-import { ErrorResponse } from "./apiConfig";
+import { CreatedAtResponse, ErrorResponse } from "./apiConfig";
 import { Message } from "../features/messages/types";
 import { Location, Ride } from "../features/rides/types";
 import { Review } from "../features/reviews/types";
@@ -40,6 +40,10 @@ export function isUser(data: any): data is User {
   );
 }
 
+export function isUserList(data: any): data is User[] {
+  return Array.isArray(data) && data.every(isUser);
+}
+
 export function isRide(data: any): data is Ride {
   return (
     typeof data.id === "number" &&
@@ -62,6 +66,10 @@ export function isRide(data: any): data is Ride {
   );
 }
 
+export function isRideList(data: any): data is Ride[] {
+  return Array.isArray(data) && data.every(isRide);
+}
+
 export function isBooking(data: any): data is Booking {
   return (
     typeof data.id === "number" &&
@@ -75,6 +83,10 @@ export function isBooking(data: any): data is Booking {
     typeof data.rideId === "number" &&
     (data.review === undefined || isReview(data.review))
   );
+}
+
+export function isBookingList(data: any): data is Booking[] {
+  return Array.isArray(data) && data.every(isBooking);
 }
 
 export function isReview(data: any): data is Review {
@@ -91,6 +103,10 @@ export function isReview(data: any): data is Review {
   );
 }
 
+export function isReviewList(data: any): data is Review[] {
+  return Array.isArray(data) && data.every(isReview);
+}
+
 export function isMessage(data: any): data is Message {
   return (
     typeof data.id === "number" &&
@@ -100,6 +116,10 @@ export function isMessage(data: any): data is Message {
     typeof data.senderId === "string" &&
     typeof data.receiverId === "string"
   );
+}
+
+export function isMessageList(data: any): data is Message[] {
+  return Array.isArray(data) && data.every(isMessage);
 }
 
 export function isPicture(data: any): data is Picture {
@@ -115,10 +135,29 @@ export function isNotification(data: any): data is Notification {
   );
 }
 
+export function isNotificationList(data: any): data is Notification[] {
+  return Array.isArray(data) && data.every(isNotification);
+}
+
 export function isLocation(data: any): data is Location {
   return (
     typeof data.id === "number" &&
     typeof data.city === "string" &&
     typeof data.country === "string"
+  );
+}
+
+export function isLocationList(data: any): data is Location[] {
+  return Array.isArray(data) && data.every(isLocation);
+}
+
+export function isCreatedAtResponse<T>(
+  data: any,
+  isT: (data: any) => data is T
+): data is CreatedAtResponse<T> {
+  return (
+    typeof data.methodName === "string" &&
+    (typeof data.id === "string" || typeof data.id === "number") &&
+    isT(data.createdResource)
   );
 }

@@ -39,8 +39,3 @@ export interface Picture {
   id: number;
   filePath: string;
 }
-
-export interface PictureCreateDTO {
-  file: File;
-  userId: string;
-}

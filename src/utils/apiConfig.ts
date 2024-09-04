@@ -11,3 +11,9 @@ export const API_ROUTES = {
 export interface ErrorResponse {
   message: string;
 }
+
+export interface CreatedAtResponse<T> {
+  methodName: string;
+  id: string | number;
+  createdResource: T;
+}
