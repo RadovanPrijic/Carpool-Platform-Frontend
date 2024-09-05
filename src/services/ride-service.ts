@@ -56,7 +56,7 @@ export async function getAllRidesForUser(id: string): Promise<Ride[]> {
     const response = await fetch(`${API_ROUTES.RIDES}/all/${id}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
     });
@@ -85,7 +85,7 @@ export async function createRide(rideCreateDTO: RideCreateDTO): Promise<Ride> {
     const response = await fetch(`${API_ROUTES.RIDES}/`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(rideCreateDTO),
@@ -119,7 +119,7 @@ export async function updateRide(
     const response = await fetch(`${API_ROUTES.RIDES}/${id}`, {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(rideUpdateDTO),
@@ -149,7 +149,7 @@ export async function deleteRide(id: number): Promise<string> {
     const response = await fetch(`${API_ROUTES.RIDES}/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
       },
     });
 
@@ -180,10 +180,10 @@ export async function getLocations(): Promise<Location[]> {
     });
 
     const result: Location[] | ErrorResponse = await response.json();
-    console.log(result);
+    // console.log(result);
 
     if (isLocationList(result)) {
-      console.log("Locations fetched successfully.");
+      // console.log("Locations fetched successfully.");
       return result;
     }
 

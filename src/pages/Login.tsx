@@ -1,45 +1,91 @@
-import { LoginRequestDTO } from "../features/authentication/types.ts";
-import { UserUpdateDTO } from "../features/users/types.ts";
-import { useAppDispatch } from "../hooks/hooks.ts";
-import { login } from "../services/authService.ts";
-import { updateUser } from "../services/user-service.ts";
+import { useNavigate } from "react-router";
+import { useAppDispatch } from "../hooks/store-hooks.ts";
+import { login } from "../services/auth-service.ts";
 import classes from "./Auth.module.css";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
+import { LoginRequestDTO } from "../features/authentication/types.ts";
+import { authActions } from "../features/authentication/auth-slice.ts";
+import { userActions } from "../features/users/user-slice.ts";
+import { getUserById } from "../services/user-service.ts";
+import { jwtDecode } from "jwt-decode";
+import { MyJwtPayload } from "../utils/auth.ts";
 
-const Login = () => {
-  // const dispatch = useAppDispatch();
+interface LoginFormData {
+  email: string;
+  password: string;
+}
 
-  const loginHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    // dispatch(authActions.login());
-    // const loginRequestDTO: LoginRequestDTO = {
-    //   email: "radovanprijic7@gmail.com",
-    //   password: "rasica123",
-    // };
-    // login(loginRequestDTO);
-    // const userUpdate: UserUpdateDTO = {
-    //   firstName: "Rakson",
-    //   lastName: "Hefe",
-    //   phoneNumber: "432423423",
-    //   birthDate: new Date(),
-    // };
-    // updateUser("f2bf8e40-bc1c-4699-8857-4871b7f8f50c", userUpdate);
+const LoginPage = () => {
+  const [formData, setFormData] = useState<LoginFormData>({
+    email: "",
+    password: "",
+  });
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { mutate } = useMutation({
+    mutationFn: login,
+    onSuccess: async (loginResponse) => {
+      const decoded = jwtDecode<MyJwtPayload>(loginResponse.token);
+      localStorage.setItem("token", loginResponse.token);
+      localStorage.setItem("expiration", decoded.exp.toString());
+      dispatch(
+        authActions.login({
+          emailConfirmationStatus: loginResponse.emailConfirmed,
+          id: decoded.nameid,
+        })
+      );
+      const userData = await getUserById(decoded.nameid);
+      dispatch(userActions.setCurrentUser(userData));
+      navigate("/");
+    },
+  });
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  // const logoutHandler = () => {
-  //   dispatch(authActions.logout());
-  // };
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const loginRequestDTO: LoginRequestDTO = {
+      email: formData.email,
+      password: formData.password,
+    };
+
+    mutate(loginRequestDTO);
+  };
 
   return (
     <main className={classes.auth}>
       <section>
-        <form onSubmit={loginHandler}>
+        <form onSubmit={handleLogin}>
           <div className={classes.control}>
             <label htmlFor="email">Email</label>
-            <input type="email" id="email" />
+            <input
+              type="email"
+              required
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
           </div>
           <div className={classes.control}>
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" />
+            <input
+              type="password"
+              required
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+            />
           </div>
           <button>Login</button>
         </form>
@@ -48,4 +94,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

@@ -24,17 +24,16 @@ export function isUser(data: any): data is User {
     typeof data.email === "string" &&
     typeof data.phoneNumber === "string" &&
     new Date(data.birthDate) instanceof Date &&
-    (data.profileBio === undefined || typeof data.profileBio === "string") &&
-    (data.rating === undefined || typeof data.rating === "number") &&
-    (data.chattinessPrefs === undefined ||
+    (data.profileBio === null || typeof data.profileBio === "string") &&
+    (data.rating === null || typeof data.rating === "number") &&
+    (data.chattinessPrefs === null ||
       typeof data.chattinessPrefs === "string") &&
-    (data.musicPrefs === undefined || typeof data.musicPrefs === "string") &&
-    (data.smokingPrefs === undefined ||
-      typeof data.smokingPrefs === "string") &&
-    (data.petsPrefs === undefined || typeof data.petsPrefs === "string") &&
+    (data.musicPrefs === null || typeof data.musicPrefs === "string") &&
+    (data.smokingPrefs === null || typeof data.smokingPrefs === "string") &&
+    (data.petsPrefs === null || typeof data.petsPrefs === "string") &&
     new Date(data.departureTime) instanceof Date &&
-    (data.picture === undefined || isPicture(data.picture)) &&
-    (data.notifications === undefined ||
+    (data.picture === null || isPicture(data.picture)) &&
+    (data.notifications === null ||
       (Array.isArray(data.notifications) &&
         data.notifications.every(isNotification)))
   );
@@ -51,7 +50,7 @@ export function isRide(data: any): data is Ride {
     typeof data.endLocation === "string" &&
     new Date(data.departureTime) instanceof Date &&
     typeof data.pricePerSeat === "number" &&
-    (data.rideDescription === undefined ||
+    (data.rideDescription === null ||
       typeof data.rideDescription === "string") &&
     typeof data.carInfo === "string" &&
     typeof data.seatsAvailable === "number" &&
@@ -77,11 +76,10 @@ export function isBooking(data: any): data is Booking {
     typeof data.seatsBooked === "number" &&
     typeof data.totalPrice === "number" &&
     new Date(data.createdAt) instanceof Date &&
-    (data.updatedAt === undefined ||
-      new Date(data.updatedAt) instanceof Date) &&
+    (data.updatedAt === null || new Date(data.updatedAt) instanceof Date) &&
     isUser(data.user) &&
     typeof data.rideId === "number" &&
-    (data.review === undefined || isReview(data.review))
+    (data.review === null || isReview(data.review))
   );
 }
 
@@ -95,8 +93,7 @@ export function isReview(data: any): data is Review {
     typeof data.rating === "number" &&
     typeof data.comment === "string" &&
     new Date(data.createdAt) instanceof Date &&
-    (data.updatedAt === undefined ||
-      new Date(data.updatedAt) instanceof Date) &&
+    (data.updatedAt === null || new Date(data.updatedAt) instanceof Date) &&
     isUser(data.reviewer) &&
     typeof data.revieweeId === "string" &&
     isRide(data.ride)

@@ -1,31 +1,33 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { MyJwtPayload } from "../../utils/auth";
 
 interface AuthState {
   isAuthenticated: boolean;
   emailConfirmed: boolean;
-  userId?: string;
-  userEmail?: string;
+  userId: string;
 }
 
 const initialState: AuthState = {
   isAuthenticated: false,
   emailConfirmed: false,
+  userId: "",
 };
 
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<MyJwtPayload>) => {
+    login: (
+      state,
+      action: PayloadAction<{ emailConfirmationStatus: boolean; id: string }>
+    ) => {
       state.isAuthenticated = true;
-      state.userId = action.payload.nameid;
-      state.userEmail = action.payload.email;
+      state.emailConfirmed = action.payload.emailConfirmationStatus;
+      state.userId = action.payload.id;
     },
     logout: (state) => {
       state.isAuthenticated = false;
-      state.userId = undefined;
-      state.userEmail = undefined;
+      state.emailConfirmed = false;
+      state.userId = "";
     },
     confirmEmail: (state) => {
       state.emailConfirmed = true;

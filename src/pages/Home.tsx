@@ -1,13 +1,16 @@
-import { useAppSelector } from "../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../hooks/store-hooks";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
-import { useLoaderData, useSubmit } from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { getTokenDuration, clearLocalStorage } from "../utils/auth";
+import { authActions } from "../features/authentication/auth-slice";
+import { userActions } from "../features/users/user-slice";
 
-const Home = () => {
+const HomePage = () => {
   const token = useLoaderData();
-  const submit = useSubmit();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const currentUser = useAppSelector((state) => state.user.currentUser);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (!token) {
@@ -25,16 +28,25 @@ const Home = () => {
     }
 
     setTimeout(() => {
+      dispatch(authActions.logout());
+      dispatch(userActions.clearCurrentUser());
       clearLocalStorage();
     }, tokenDuration);
-  }, [token, submit]);
+  }, [token, dispatch]);
 
   return (
     <div>
-      <Link to="login">Login</Link>
-      <p>STATE: {isAuthenticated ? "AUTH TRUE" : "AUTH FALSE"}</p>
+      <Link to="register">Register </Link>
+      <Link to="login">Login </Link>
+      <Link to="logout">Logout </Link>
+      <p>
+        CURRENT AUTH STATE:
+        {isAuthenticated ? " Authenticated" : " Not authenticated"} | CURRENT
+        USER:
+        {currentUser ? ` ${currentUser.firstName}` : " Nobody's home"}
+      </p>
     </div>
   );
 };
 
-export default Home;
+export default HomePage;

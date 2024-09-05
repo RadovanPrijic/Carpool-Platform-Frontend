@@ -56,7 +56,7 @@ export async function createReview(
     const response = await fetch(`${API_ROUTES.REVIEWS}/`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reviewCreateDTO),
@@ -90,7 +90,7 @@ export async function updateReview(
     const response = await fetch(`${API_ROUTES.REVIEWS}/${id}`, {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(reviewUpdateDTO),
@@ -120,7 +120,7 @@ export async function deleteReview(id: number): Promise<string> {
     const response = await fetch(`${API_ROUTES.REVIEWS}/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
       },
     });
 

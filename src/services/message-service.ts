@@ -23,7 +23,7 @@ export async function getAllConversationMessages(
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${getAuthToken}`,
+          Authorization: `Bearer ${getAuthToken()}`,
           "Content-Type": "application/json",
         },
       }
@@ -55,7 +55,7 @@ export async function sendMessage(
     const response = await fetch(`${API_ROUTES.MESSAGES}/`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(messageCreateDTO),
@@ -89,7 +89,7 @@ export async function updateMessage(
     const response = await fetch(`${API_ROUTES.MESSAGES}/${id}`, {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(messageUpdateDTO),

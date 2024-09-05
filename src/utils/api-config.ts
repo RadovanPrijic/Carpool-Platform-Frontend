@@ -1,3 +1,5 @@
+import { QueryClient } from "@tanstack/react-query";
+
 export const BASE_URL = "https://localhost:7153/api";
 
 export const API_ROUTES = {
@@ -7,6 +9,8 @@ export const API_ROUTES = {
   REVIEWS: `${BASE_URL}/Reviews`,
   MESSAGES: `${BASE_URL}/Messages`,
 };
+
+export const queryClient = new QueryClient();
 
 export interface ErrorResponse {
   message: string;

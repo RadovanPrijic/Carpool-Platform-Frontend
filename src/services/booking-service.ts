@@ -18,7 +18,7 @@ export async function getAllBookingsForUser(id: string): Promise<Booking[]> {
     const response = await fetch(`${API_ROUTES.BOOKINGS}/all/${id}`, {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
     });
@@ -49,7 +49,7 @@ export async function createBooking(
     const response = await fetch(`${API_ROUTES.BOOKINGS}/`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(bookingCreateDTO),
@@ -83,7 +83,7 @@ export async function updateBookingStatus(
     const response = await fetch(`${API_ROUTES.BOOKINGS}/${id}`, {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(bookingUpdateDTO),
@@ -113,7 +113,7 @@ export async function cancelBooking(id: number): Promise<Booking> {
     const response = await fetch(`${API_ROUTES.BOOKINGS}/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
     });

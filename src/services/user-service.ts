@@ -8,6 +8,35 @@ import {
 import { Picture, User, UserUpdateDTO } from "../features/users/types";
 import { getAuthToken } from "../utils/auth";
 
+export async function getUserById(id: string): Promise<User> {
+  try {
+    const response = await fetch(`${API_ROUTES.USERS}/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result: User | ErrorResponse = await response.json();
+    console.log(result);
+
+    if (isUser(result)) {
+      console.log("User successfully fetched.");
+      return result;
+    }
+
+    if (isErrorResponse(result)) {
+      throw new Error(result.message);
+    }
+
+    throw new Error("Unexpected response format.");
+  } catch (error) {
+    if (error instanceof Error) throw new Error(error.message);
+    else throw new Error("An unexpected error has occured.");
+  }
+}
+
 export async function updateUser(
   id: string,
   userUpdateDTO: UserUpdateDTO
@@ -16,7 +45,7 @@ export async function updateUser(
     const response = await fetch(`${API_ROUTES.USERS}/${id}`, {
       method: "PUT",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userUpdateDTO),
@@ -49,7 +78,7 @@ export async function getUserNotifications(
     const response = await fetch(`${API_ROUTES.USERS}/notifications/${id}`, {
       method: `${markAsChecked ? "PUT" : "GET"}`,
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
     });
@@ -80,7 +109,7 @@ export async function uploadProfilePicture(
     const response = await fetch(`${API_ROUTES.USERS}/upload-profile-picture`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${getAuthToken}`,
+        Authorization: `Bearer ${getAuthToken()}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(pictureData),
@@ -112,7 +141,7 @@ export async function deleteProfilePicture(id: number): Promise<string> {
       {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${getAuthToken}`,
+          Authorization: `Bearer ${getAuthToken()}`,
         },
       }
     );

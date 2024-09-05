@@ -1,5 +1,4 @@
-import { jwtDecode } from "jwt-decode";
-import { getAuthToken, MyJwtPayload } from "../utils/auth";
+import { getAuthToken } from "../utils/auth";
 import {
   EmailDTO,
   LoginRequestDTO,
@@ -27,9 +26,6 @@ export async function login(
     console.log(result);
 
     if (isLoginResponse(result)) {
-      localStorage.setItem("token", result.token);
-      const decoded = jwtDecode<MyJwtPayload>(result.token);
-      localStorage.setItem("expiration", decoded.exp.toString());
       console.log("Login successful. Token and email confirmation saved.");
       return result;
     }
@@ -83,7 +79,7 @@ export async function initiateEmailConfirmation(id: string): Promise<string> {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${getAuthToken}`,
+          Authorization: `Bearer ${getAuthToken()}`,
         },
       }
     );
@@ -115,7 +111,7 @@ export async function initiateEmailChange(
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${getAuthToken}`,
+          Authorization: `Bearer ${getAuthToken()}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify(emailDTO),
@@ -155,7 +151,7 @@ export async function confirmEmail(
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${getAuthToken}`,
+          Authorization: `Bearer ${getAuthToken()}`,
         },
       }
     );
