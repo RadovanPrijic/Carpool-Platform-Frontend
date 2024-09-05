@@ -4,13 +4,13 @@ import {
   ReviewCreateDTO,
   ReviewUpdateDTO,
 } from "../features/reviews/types";
-import { API_ROUTES, CreatedAtResponse } from "../utils/apiConfig";
+import { API_ROUTES, CreatedAtResponse } from "../utils/api-config";
 import {
   isCreatedAtResponse,
   isErrorResponse,
   isReview,
   isReviewList,
-} from "../utils/typeGuards";
+} from "../utils/type-guards";
 import { getAuthToken } from "../utils/auth";
 
 export async function getReviewsForUser(

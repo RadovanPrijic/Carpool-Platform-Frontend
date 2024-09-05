@@ -4,14 +4,14 @@ import {
   BookingCreateDTO,
   BookingUpdateDTO,
 } from "../features/bookings/types";
-import { API_ROUTES, CreatedAtResponse } from "../utils/apiConfig";
+import { API_ROUTES, CreatedAtResponse } from "../utils/api-config";
 import { getAuthToken } from "../utils/auth";
 import {
   isBooking,
   isBookingList,
   isCreatedAtResponse,
   isErrorResponse,
-} from "../utils/typeGuards";
+} from "../utils/type-guards";
 
 export async function getAllBookingsForUser(id: string): Promise<Booking[]> {
   try {

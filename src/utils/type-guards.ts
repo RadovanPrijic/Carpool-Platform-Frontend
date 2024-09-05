@@ -1,6 +1,6 @@
 import { Picture, User } from "../features/users/types";
 import { LoginResponseDTO } from "../features/authentication/types";
-import { CreatedAtResponse, ErrorResponse } from "./apiConfig";
+import { CreatedAtResponse, ErrorResponse } from "./api-config";
 import { Message } from "../features/messages/types";
 import { Location, Ride } from "../features/rides/types";
 import { Review } from "../features/reviews/types";

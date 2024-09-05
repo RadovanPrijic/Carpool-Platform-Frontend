@@ -5,7 +5,7 @@ import {
   RideCreateDTO,
   RideUpdateDTO,
 } from "../features/rides/types";
-import { API_ROUTES, CreatedAtResponse } from "../utils/apiConfig";
+import { API_ROUTES, CreatedAtResponse } from "../utils/api-config";
 import { getAuthToken } from "../utils/auth";
 import {
   isCreatedAtResponse,
@@ -13,7 +13,7 @@ import {
   isLocationList,
   isRide,
   isRideList,
-} from "../utils/typeGuards";
+} from "../utils/type-guards";
 
 export async function getFilteredRides(
   from: string,

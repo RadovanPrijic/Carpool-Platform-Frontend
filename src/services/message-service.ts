@@ -4,14 +4,14 @@ import {
   MessageCreateDTO,
   MessageUpdateDTO,
 } from "../features/messages/types";
-import { API_ROUTES, CreatedAtResponse } from "../utils/apiConfig";
+import { API_ROUTES, CreatedAtResponse } from "../utils/api-config";
 import { getAuthToken } from "../utils/auth";
 import {
   isCreatedAtResponse,
   isErrorResponse,
   isMessage,
   isMessageList,
-} from "../utils/typeGuards";
+} from "../utils/type-guards";
 
 export async function getAllConversationMessages(
   userOne: string,

@@ -7,8 +7,8 @@ import {
   PasswordDTO,
   RegistrationRequestDTO,
 } from "../features/authentication/types";
-import { API_ROUTES, ErrorResponse } from "../utils/apiConfig";
-import { isLoginResponse, isErrorResponse, isUser } from "../utils/typeGuards";
+import { API_ROUTES, ErrorResponse } from "../utils/api-config";
+import { isLoginResponse, isErrorResponse, isUser } from "../utils/type-guards";
 import { User } from "../features/users/types";
 
 export async function login(

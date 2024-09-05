@@ -1,10 +1,10 @@
-import { API_ROUTES, ErrorResponse } from "../utils/apiConfig";
+import { API_ROUTES, ErrorResponse } from "../utils/api-config";
 import {
   isErrorResponse,
   isNotificationList,
   isPicture,
   isUser,
-} from "../utils/typeGuards";
+} from "../utils/type-guards";
 import { Picture, User, UserUpdateDTO } from "../features/users/types";
 import { getAuthToken } from "../utils/auth";
 

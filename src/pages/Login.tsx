@@ -2,7 +2,7 @@ import { LoginRequestDTO } from "../features/authentication/types.ts";
 import { UserUpdateDTO } from "../features/users/types.ts";
 import { useAppDispatch } from "../hooks/hooks.ts";
 import { login } from "../services/authService.ts";
-import { updateUser } from "../services/userService.ts";
+import { updateUser } from "../services/user-service.ts";
 import classes from "./Auth.module.css";
 
 const Login = () => {
