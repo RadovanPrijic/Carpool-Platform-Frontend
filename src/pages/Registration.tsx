@@ -4,40 +4,20 @@ import { register } from "../services/auth-service";
 import { RegistrationRequestDTO } from "../features/authentication/types";
 import classes from "./Auth.module.css";
 
-interface RegistrationFormData {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  birthDate: Date;
-  profileBio?: string;
-  chattinessPrefs?: string;
-  musicPrefs?: string;
-  smokingPrefs?: string;
-  petsPrefs?: string;
-}
-
 const RegistrationPage = () => {
-  const [formData, setFormData] = useState<RegistrationFormData>({
+  const [formData, setFormData] = useState<RegistrationRequestDTO>({
     email: "",
     password: "",
     firstName: "",
     lastName: "",
     phoneNumber: "",
     birthDate: new Date(),
-    profileBio: undefined,
-    chattinessPrefs: undefined,
-    musicPrefs: undefined,
-    smokingPrefs: undefined,
-    petsPrefs: undefined,
   });
 
-  let registered: boolean = false;
   const { mutate } = useMutation({
     mutationFn: register,
     onSuccess: async () => {
-      registered = true;
+      // Do something
     },
     onError: (error) => {
       console.log(error);
@@ -68,11 +48,9 @@ const RegistrationPage = () => {
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const registrationRequestDTO: RegistrationRequestDTO = {
       ...formData,
     };
-
     mutate(registrationRequestDTO);
   };
 
@@ -155,6 +133,7 @@ const RegistrationPage = () => {
               cols={20}
               value={formData.profileBio}
               onChange={handleInputChange}
+              defaultValue=""
             />
           </div>
           <div className={classes.control}>
@@ -168,7 +147,7 @@ const RegistrationPage = () => {
               onChange={handleInputChange}
               defaultValue=""
             >
-              <option value="" disabled></option>
+              <option value=""></option>
               <option value="I love talking!">I love chatting!</option>
               <option value="I chat only when I'm in the mood.">
                 I chat only when I'm in the mood.
@@ -187,7 +166,7 @@ const RegistrationPage = () => {
               onChange={handleInputChange}
               defaultValue=""
             >
-              <option value="" disabled></option>
+              <option value=""></option>
               <option value="Let there be music!">Let there be music!</option>
               <option value="I like music only when I'm in the mood.">
                 I listen to music only when I'm in the mood.
@@ -206,7 +185,7 @@ const RegistrationPage = () => {
               onChange={handleInputChange}
               defaultValue=""
             >
-              <option value="" disabled></option>
+              <option value=""></option>
               <option value="I have no problem with smoking in the car.">
                 I have no problem with smoking in the car.
               </option>
@@ -225,7 +204,7 @@ const RegistrationPage = () => {
               onChange={handleInputChange}
               defaultValue=""
             >
-              <option value="" disabled></option>
+              <option value=""></option>
               <option value="I adore pets!">I adore pets!</option>
               <option value="I only like certain kinds of pets.">
                 I only like certain kinds of pets.
@@ -237,12 +216,6 @@ const RegistrationPage = () => {
           </div>
           <button>Register</button>
         </form>
-        {registered && (
-          <p>
-            "You have been successfully registered. Check your email address for
-            an email confirmation link."
-          </p>
-        )}
       </section>
     </main>
   );

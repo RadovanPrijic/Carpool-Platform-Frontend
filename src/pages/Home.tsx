@@ -41,7 +41,9 @@ const HomePage = () => {
         <Link to="login">Login </Link>
         <Link to="logout">Logout </Link>
       </div>
-      <div></div>
+      <div>
+        <Link to="edit-user">Edit user </Link>
+      </div>
       <div>
         <p>
           CURRENT AUTH STATE:

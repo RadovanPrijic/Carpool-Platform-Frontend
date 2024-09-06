@@ -37,10 +37,15 @@ export async function getUserById(id: string): Promise<User> {
   }
 }
 
-export async function updateUser(
-  id: string,
-  userUpdateDTO: UserUpdateDTO
-): Promise<User> {
+interface UpdateUserArgs {
+  id: string;
+  userUpdateDTO: UserUpdateDTO;
+}
+
+export async function updateUser({
+  id,
+  userUpdateDTO,
+}: UpdateUserArgs): Promise<User> {
   try {
     const response = await fetch(`${API_ROUTES.USERS}/${id}`, {
       method: "PUT",
