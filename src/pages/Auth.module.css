@@ -19,7 +19,9 @@
   margin-bottom: 0.5rem;
 }
 
-.control input {
+.control input,
+textarea,
+select {
   display: block;
   width: 20rem;
   margin: auto;

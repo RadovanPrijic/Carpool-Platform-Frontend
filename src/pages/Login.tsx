@@ -54,8 +54,7 @@ const LoginPage = () => {
     event.preventDefault();
 
     const loginRequestDTO: LoginRequestDTO = {
-      email: formData.email,
-      password: formData.password,
+      ...formData,
     };
 
     mutate(loginRequestDTO);

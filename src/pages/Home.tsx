@@ -35,17 +35,22 @@ const HomePage = () => {
   }, [token, dispatch]);
 
   return (
-    <div>
-      <Link to="register">Register </Link>
-      <Link to="login">Login </Link>
-      <Link to="logout">Logout </Link>
-      <p>
-        CURRENT AUTH STATE:
-        {isAuthenticated ? " Authenticated" : " Not authenticated"} | CURRENT
-        USER:
-        {currentUser ? ` ${currentUser.firstName}` : " Nobody's home"}
-      </p>
-    </div>
+    <>
+      <div>
+        <Link to="register">Register </Link>
+        <Link to="login">Login </Link>
+        <Link to="logout">Logout </Link>
+      </div>
+      <div></div>
+      <div>
+        <p>
+          CURRENT AUTH STATE:
+          {isAuthenticated ? " Authenticated" : " Not authenticated"} | CURRENT
+          USER:
+          {currentUser ? ` ${currentUser.firstName}` : " Nobody's home"}
+        </p>
+      </div>
+    </>
   );
 };
 
