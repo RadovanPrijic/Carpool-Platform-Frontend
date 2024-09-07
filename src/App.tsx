@@ -19,6 +19,7 @@ import EmailChangePage from "./pages/EmailChange";
 import EmailConfirmationPage from "./pages/EmailConfirmation";
 import PasswordResetPage from "./pages/PasswordReset";
 import InitiatePasswordResetPage from "./pages/InitiatePasswordReset";
+import ProfilePicturePage from "./pages/ProfilePicture";
 
 function App() {
   const router = createBrowserRouter(
@@ -33,6 +34,7 @@ function App() {
           <Route path="edit-user" element={<EditUserPage />} />
 
           <Route path="user-profile" element={<UserProfilePage />} />
+          <Route path="profile-picture" element={<ProfilePicturePage />} />
           <Route path="change-email" element={<EmailChangePage />} />
           <Route
             path="email-confirmation"

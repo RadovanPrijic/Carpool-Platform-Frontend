@@ -107,18 +107,26 @@ export async function getUserNotifications(
   }
 }
 
-export async function uploadProfilePicture(
-  pictureData: FormData
-): Promise<Picture> {
+export interface UploadProfilePictureArgs {
+  file: FormData;
+  userId: string;
+}
+
+export async function uploadProfilePicture({
+  file,
+  userId,
+}: UploadProfilePictureArgs): Promise<Picture> {
   try {
-    const response = await fetch(`${API_ROUTES.USERS}/upload-profile-picture`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${getAuthToken()}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(pictureData),
-    });
+    const response = await fetch(
+      `${API_ROUTES.USERS}/upload-profile-picture/${userId}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: file,
+      }
+    );
 
     const result: Picture | ErrorResponse = await response.json();
     console.log(result);

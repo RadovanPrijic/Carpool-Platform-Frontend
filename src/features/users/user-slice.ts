@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { User } from "./types";
+import { Picture, User } from "./types";
 
 interface UserState {
   currentUser?: User;
@@ -21,6 +21,12 @@ export const userSlice = createSlice({
     },
     changeUserEmail: (state, action: PayloadAction<string>) => {
       state.currentUser!.email = action.payload;
+    },
+    uploadProfilePicture: (state, action: PayloadAction<Picture>) => {
+      state.currentUser!.picture = action.payload;
+    },
+    deleteProfilePicture: (state) => {
+      state.currentUser!.picture = undefined;
     },
   },
 });

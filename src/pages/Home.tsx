@@ -43,6 +43,7 @@ const HomePage = () => {
       </div>
       <div>
         <Link to="user-profile">User profile |</Link>
+        <Link to="profile-picture"> Profile picture |</Link>
         <Link to="edit-user"> Edit user </Link>
         <Link to="change-email">| Change email |</Link>
         <Link to="initiate-password-reset"> Reset password</Link>
