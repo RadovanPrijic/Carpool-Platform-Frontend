@@ -101,10 +101,15 @@ export async function initiateEmailConfirmation(id: string): Promise<string> {
   }
 }
 
-export async function initiateEmailChange(
-  id: string,
-  emailDTO: EmailDTO
-): Promise<string> {
+interface InitiateEmailChangeArgs {
+  id: string;
+  emailDTO: EmailDTO;
+}
+
+export async function initiateEmailChange({
+  id,
+  emailDTO,
+}: InitiateEmailChangeArgs): Promise<string> {
   try {
     const response = await fetch(
       `${API_ROUTES.USERS}/initiate-email-change/${id}`,
@@ -135,12 +140,19 @@ export async function initiateEmailChange(
   }
 }
 
-export async function confirmEmail(
-  id: string,
-  confirmationToken: string,
-  emailChange: boolean,
-  newEmail?: string
-): Promise<string> {
+interface ConfirmEmailArgs {
+  id: string;
+  confirmationToken: string;
+  emailChange: boolean;
+  newEmail?: string;
+}
+
+export async function confirmEmail({
+  id,
+  confirmationToken,
+  emailChange,
+  newEmail,
+}: ConfirmEmailArgs): Promise<string> {
   try {
     const response = await fetch(
       `${
@@ -202,11 +214,17 @@ export async function initiatePasswordReset(email: string): Promise<string> {
   }
 }
 
-export async function resetPassword(
-  email: string,
-  resetToken: string,
-  passwordDTO: PasswordDTO
-): Promise<string> {
+interface ResetPasswordArgs {
+  email: string;
+  resetToken: string;
+  passwordDTO: PasswordDTO;
+}
+
+export async function resetPassword({
+  email,
+  resetToken,
+  passwordDTO,
+}: ResetPasswordArgs): Promise<string> {
   try {
     const response = await fetch(
       `${API_ROUTES.USERS}/reset-password?email=${email}&resetToken=${resetToken}`,

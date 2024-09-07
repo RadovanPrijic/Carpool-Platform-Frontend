@@ -11,13 +11,8 @@ import { getUserById } from "../services/user-service.ts";
 import { jwtDecode } from "jwt-decode";
 import { MyJwtPayload } from "../utils/auth.ts";
 
-interface LoginFormData {
-  email: string;
-  password: string;
-}
-
 const LoginPage = () => {
-  const [formData, setFormData] = useState<LoginFormData>({
+  const [formData, setFormData] = useState<LoginRequestDTO>({
     email: "",
     password: "",
   });

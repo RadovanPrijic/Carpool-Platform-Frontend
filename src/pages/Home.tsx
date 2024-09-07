@@ -37,12 +37,15 @@ const HomePage = () => {
   return (
     <>
       <div>
-        <Link to="register">Register </Link>
-        <Link to="login">Login </Link>
-        <Link to="logout">Logout </Link>
+        <Link to="register">Register |</Link>
+        <Link to="login"> Login </Link>
+        <Link to="logout">| Logout </Link>
       </div>
       <div>
-        <Link to="edit-user">Edit user </Link>
+        <Link to="user-profile">User profile |</Link>
+        <Link to="edit-user"> Edit user </Link>
+        <Link to="change-email">| Change email |</Link>
+        <Link to="change-password"> Change password</Link>
       </div>
       <div>
         <p>

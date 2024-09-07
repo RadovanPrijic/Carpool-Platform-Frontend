@@ -19,6 +19,9 @@ export const userSlice = createSlice({
     clearCurrentUser: (state) => {
       state.currentUser = undefined;
     },
+    changeUserEmail: (state, action: PayloadAction<string>) => {
+      state.currentUser!.email = action.payload;
+    },
   },
 });
 
