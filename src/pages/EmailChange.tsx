@@ -28,7 +28,7 @@ const EmailChangePage = () => {
     }));
   };
 
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleEmailChange = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const emailDTO: EmailDTO = {
       ...formData,
@@ -39,7 +39,7 @@ const EmailChangePage = () => {
   return (
     <main className={classes.auth}>
       <section>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleEmailChange}>
           <div className={classes.control}>
             <label htmlFor="email">Current email address</label>
             <input

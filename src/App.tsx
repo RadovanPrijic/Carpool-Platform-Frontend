@@ -17,8 +17,8 @@ import EditUserPage from "./pages/EditUser";
 import UserProfilePage from "./pages/UserProfile";
 import EmailChangePage from "./pages/EmailChange";
 import EmailConfirmationPage from "./pages/EmailConfirmation";
-import PasswordConfirmationPage from "./pages/PasswordConfirmation";
 import PasswordResetPage from "./pages/PasswordReset";
+import InitiatePasswordResetPage from "./pages/InitiatePasswordReset";
 
 function App() {
   const router = createBrowserRouter(
@@ -40,8 +40,11 @@ function App() {
           />
         </Route>
 
-        <Route path="change-password" element={<PasswordResetPage />} />
-        <Route path="password-reset" element={<PasswordConfirmationPage />} />
+        <Route
+          path="initiate-password-reset"
+          element={<InitiatePasswordResetPage />}
+        />
+        <Route path="password-reset" element={<PasswordResetPage />} />
       </>
     )
   );

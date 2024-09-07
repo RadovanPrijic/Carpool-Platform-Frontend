@@ -20,10 +20,9 @@ const EmailConfirmationPage = () => {
       console.log(response);
       if (confirmationToken) {
         dispatch(authActions.confirmEmail());
+      } else {
+        dispatch(userActions.changeUserEmail(newEmail!));
       }
-      // else {
-      //   dispatch(userActions.changeUserEmail(newEmail!));
-      // }
     },
     onError: (error) => {
       console.log(error.message);
