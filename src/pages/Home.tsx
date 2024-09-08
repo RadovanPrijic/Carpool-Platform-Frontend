@@ -1,14 +1,11 @@
 import { useAppDispatch, useAppSelector } from "../hooks/store-hooks";
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 import { getTokenDuration, clearLocalStorage } from "../utils/auth";
 import { authActions } from "../features/authentication/auth-slice";
 import { userActions } from "../features/users/user-slice";
-import { useQuery } from "@tanstack/react-query";
-import { GetFilteredRidesArgs, getLocations } from "../services/ride-service";
-import { Location } from "../features/rides/types";
-import RideFilter from "../features/rides/RideFilter";
+import RideSearch from "../features/rides/RideSearch";
 
 const HomePage = () => {
   const token = useLoaderData();
@@ -60,7 +57,7 @@ const HomePage = () => {
           {currentUser ? ` ${currentUser.firstName}` : " Nobody's home"}
         </p>
       </div>
-      <RideFilter />
+      <RideSearch />
     </>
   );
 };

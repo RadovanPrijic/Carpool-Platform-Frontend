@@ -3,17 +3,13 @@ import { getLocations } from "../../services/ride-service";
 import { useQuery } from "@tanstack/react-query";
 import LocationDropdown from "./LocationDropdown";
 import { Location } from "./types";
-import { GetFilteredRidesArgs } from "../../services/ride-service";
-import { useAppDispatch } from "../../hooks/store-hooks";
-import { ridesActions } from "./rides-slice";
 import { useNavigate } from "react-router";
 
-const RideFilter = () => {
+const RideSearch = () => {
   const [startLocation, setStartLocation] = useState<Location | null>(null);
   const [endLocation, setEndLocation] = useState<Location | null>(null);
   const [date, setDate] = useState<Date>(new Date());
   const [seats, setSeats] = useState<number>(1);
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const {
@@ -30,7 +26,7 @@ const RideFilter = () => {
     event.preventDefault();
     navigate(
       `/filtered-rides?from=${
-        startLocation!.city + ", " + endLocation!.country
+        startLocation!.city + ", " + startLocation!.country
       }&to=${
         endLocation!.city + ", " + endLocation!.country
       }&date=${date.toISOString()}&seats=${seats}`
@@ -42,7 +38,7 @@ const RideFilter = () => {
   }
 
   if (error) {
-    return <div>Error loading locations</div>;
+    return <div>Error loading locations: {error.message}</div>;
   }
 
   return (
@@ -85,4 +81,4 @@ const RideFilter = () => {
   );
 };
 
-export default RideFilter;
+export default RideSearch;

@@ -15,10 +15,10 @@ import {
   isRideList,
 } from "../utils/type-guards";
 
-export interface GetFilteredRidesArgs {
+interface GetFilteredRidesArgs {
   from: string;
   to: string;
-  date: Date;
+  date: string;
   seats: number;
 }
 
@@ -30,9 +30,11 @@ export async function getFilteredRides({
 }: GetFilteredRidesArgs): Promise<Ride[]> {
   try {
     const response = await fetch(
-      `${
-        API_ROUTES.RIDES
-      }/?from=${from}&to=${to}&date=${date.toISOString()}&seats=${seats}`,
+      `${API_ROUTES.RIDES}/?from=${encodeURIComponent(
+        from
+      )}&to=${encodeURIComponent(to)}&date=${encodeURIComponent(
+        date
+      )}&seats=${seats}`,
       {
         method: "GET",
         headers: {

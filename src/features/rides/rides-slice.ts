@@ -3,10 +3,12 @@ import { Ride } from "./types";
 
 interface RidesState {
   rides?: Ride[];
+  filteredRides?: Ride[];
 }
 
 const initialState: RidesState = {
   rides: undefined,
+  filteredRides: undefined,
 };
 
 export const ridesSlice = createSlice({
@@ -15,6 +17,10 @@ export const ridesSlice = createSlice({
   reducers: {
     setRides: (state, action: PayloadAction<Ride[]>) => {
       state.rides = action.payload;
+      state.filteredRides = action.payload;
+    },
+    setFilteredRides: (state, action: PayloadAction<Ride[]>) => {
+      state.filteredRides = action.payload;
     },
   },
 });

@@ -20,6 +20,7 @@ import EmailConfirmationPage from "./pages/EmailConfirmation";
 import PasswordResetPage from "./pages/PasswordReset";
 import InitiatePasswordResetPage from "./pages/InitiatePasswordReset";
 import ProfilePicturePage from "./pages/ProfilePicture";
+import FilteredRidesPage from "./pages/FilteredRides";
 
 function App() {
   const router = createBrowserRouter(
@@ -47,6 +48,7 @@ function App() {
           element={<InitiatePasswordResetPage />}
         />
         <Route path="password-reset" element={<PasswordResetPage />} />
+        <Route path="filtered-rides" element={<FilteredRidesPage />} />
       </>
     )
   );

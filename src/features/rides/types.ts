@@ -5,7 +5,7 @@ export interface Ride {
   id: number;
   startLocation: string;
   endLocation: string;
-  departureTime: Date;
+  departureTime: string;
   pricePerSeat: number;
   rideDescription?: string;
   carInfo: string;
@@ -14,7 +14,7 @@ export interface Ride {
   luggageSize: string;
   insuranceStatus: boolean;
   automaticBooking: boolean;
-  createdAt: Date;
+  createdAt: string;
   user: User;
   bookings: Booking[];
 }
@@ -22,7 +22,7 @@ export interface Ride {
 export interface RideCreateDTO {
   startLocation: string;
   endLocation: string;
-  departureTime: Date;
+  departureTime: string;
   pricePerSeat: number;
   rideDescription?: string;
   carInfo: string;
@@ -37,7 +37,7 @@ export interface RideCreateDTO {
 export interface RideUpdateDTO {
   startLocation: string;
   endLocation: string;
-  departureTime: Date;
+  departureTime: string;
   pricePerSeat: number;
   rideDescription?: string;
   carInfo: string;
