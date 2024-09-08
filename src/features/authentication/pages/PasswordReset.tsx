@@ -1,9 +1,9 @@
 import { useSearchParams } from "react-router-dom";
 import classes from "./Auth.module.css";
 import { useMutation } from "@tanstack/react-query";
-import { resetPassword } from "../services/auth-service";
+import { resetPassword } from "../../../services/auth-service";
 import { useState } from "react";
-import { PasswordDTO } from "../features/authentication/types";
+import { PasswordDTO } from "../types";
 
 const PasswordResetPage = () => {
   const [searchParams] = useSearchParams();

@@ -91,6 +91,35 @@ export async function getAllRidesForUser(id: string): Promise<Ride[]> {
   }
 }
 
+export async function getRideById(id: number): Promise<Ride> {
+  try {
+    const response = await fetch(`${API_ROUTES.RIDES}/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${getAuthToken()}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result: Ride | ErrorResponse = await response.json();
+    console.log(result);
+
+    if (isRide(result)) {
+      console.log("Ride fetched successfully.");
+      return result;
+    }
+
+    if (isErrorResponse(result)) {
+      throw new Error(result.message);
+    }
+
+    throw new Error("Unexpected response format.");
+  } catch (error) {
+    if (error instanceof Error) throw new Error(error.message);
+    else throw new Error("An unexpected error has occured.");
+  }
+}
+
 export async function createRide(rideCreateDTO: RideCreateDTO): Promise<Ride> {
   try {
     const response = await fetch(`${API_ROUTES.RIDES}/`, {

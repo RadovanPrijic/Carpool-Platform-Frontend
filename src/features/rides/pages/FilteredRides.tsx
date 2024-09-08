@@ -1,11 +1,11 @@
 import { useSearchParams } from "react-router-dom";
-import { getFilteredRides } from "../services/ride-service";
+import { getFilteredRides } from "../../../services/ride-service";
 import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import RideSortAndFilter from "../features/rides/RideSortAndFilter";
-import { useAppDispatch, useAppSelector } from "../hooks/store-hooks";
-import { ridesActions } from "../features/rides/rides-slice";
-import { addTwoHours } from "../utils/date-function";
+import RideSortAndFilter from "../components/RideSortAndFilter";
+import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
+import { ridesActions } from "../rides-slice";
+import { addTwoHours } from "../../../utils/date-function";
 
 const FilteredRidesPage = () => {
   const [searchParams] = useSearchParams();

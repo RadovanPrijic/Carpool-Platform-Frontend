@@ -5,7 +5,7 @@ import { useLoaderData } from "react-router-dom";
 import { getTokenDuration, clearLocalStorage } from "../utils/auth";
 import { authActions } from "../features/authentication/auth-slice";
 import { userActions } from "../features/users/user-slice";
-import RideSearch from "../features/rides/RideSearch";
+import RideSearch from "../features/rides/components/RideSearch";
 
 const HomePage = () => {
   const token = useLoaderData();
@@ -48,6 +48,9 @@ const HomePage = () => {
         <Link to="edit-user"> Edit user </Link>
         <Link to="change-email">| Change email |</Link>
         <Link to="initiate-password-reset"> Reset password</Link>
+      </div>
+      <div>
+        <Link to="rides">User rides |</Link>
       </div>
       <div>
         <p>

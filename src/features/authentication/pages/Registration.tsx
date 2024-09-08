@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { register } from "../services/auth-service";
-import { RegistrationRequestDTO } from "../features/authentication/types";
+import { register } from "../../../services/auth-service";
+import { RegistrationRequestDTO } from "../types";
 import classes from "./Auth.module.css";
 
 const RegistrationPage = () => {

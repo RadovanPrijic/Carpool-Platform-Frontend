@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import classes from "./Auth.module.css";
 import { useMutation } from "@tanstack/react-query";
-import { initiatePasswordReset } from "../services/auth-service";
+import { initiatePasswordReset } from "../../../services/auth-service";
 
 const InitiatePasswordResetPage = () => {
   const emailRef = useRef<HTMLInputElement | null>(null);

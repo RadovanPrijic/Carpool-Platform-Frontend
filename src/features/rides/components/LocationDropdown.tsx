@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Location } from "./types";
+import { Location } from "../types";
 import { debounce } from "lodash";
 
 interface LocationDropdownProps {

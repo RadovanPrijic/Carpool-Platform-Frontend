@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Ride } from "./types";
-import { useAppDispatch } from "../../hooks/store-hooks";
-import { ridesActions } from "./rides-slice";
+import { Ride } from "../types";
+import { useAppDispatch } from "../../../hooks/store-hooks";
+import { ridesActions } from "../rides-slice";
 
 interface SortingAndFilteringProps {
   rides: Ride[];

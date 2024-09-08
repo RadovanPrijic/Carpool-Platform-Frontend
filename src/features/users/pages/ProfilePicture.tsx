@@ -1,11 +1,11 @@
 import { useRef } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/store-hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { useMutation } from "@tanstack/react-query";
-import { userActions } from "../features/users/user-slice";
+import { userActions } from "../user-slice";
 import {
   deleteProfilePicture,
   uploadProfilePicture,
-} from "../services/user-service";
+} from "../../../services/user-service";
 import classes from "./Auth.module.css";
 
 const ProfilePicturePage = () => {

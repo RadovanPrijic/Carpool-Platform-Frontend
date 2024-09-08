@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
-import { updateUser } from "../services/user-service";
-import { UserUpdateDTO } from "../features/users/types";
-import { useAppDispatch, useAppSelector } from "../hooks/store-hooks";
+import { updateUser } from "../../../services/user-service";
+import { UserUpdateDTO } from "../types";
+import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { useState } from "react";
 import classes from "./Auth.module.css";
-import { userActions } from "../features/users/user-slice";
+import { userActions } from "../user-slice";
 
 const EditUserPage = () => {
   const dispatch = useAppDispatch();

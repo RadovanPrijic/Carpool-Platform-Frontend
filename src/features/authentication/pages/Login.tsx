@@ -1,15 +1,15 @@
 import { useNavigate } from "react-router";
-import { useAppDispatch } from "../hooks/store-hooks.ts";
-import { login } from "../services/auth-service.ts";
+import { useAppDispatch } from "../../../hooks/store-hooks.ts";
+import { login } from "../../../services/auth-service.ts";
 import classes from "./Auth.module.css";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { LoginRequestDTO } from "../features/authentication/types.ts";
-import { authActions } from "../features/authentication/auth-slice.ts";
-import { userActions } from "../features/users/user-slice.ts";
-import { getUserById } from "../services/user-service.ts";
+import { LoginRequestDTO } from "../types.ts";
+import { authActions } from "../auth-slice.ts";
+import { userActions } from "../../users/user-slice.ts";
+import { getUserById } from "../../../services/user-service.ts";
 import { jwtDecode } from "jwt-decode";
-import { MyJwtPayload } from "../utils/auth.ts";
+import { MyJwtPayload } from "../../../utils/auth.ts";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<LoginRequestDTO>({

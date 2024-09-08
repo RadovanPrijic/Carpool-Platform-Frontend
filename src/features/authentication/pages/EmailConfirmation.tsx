@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { confirmEmail } from "../services/auth-service";
+import { confirmEmail } from "../../../services/auth-service";
 import { useMutation } from "@tanstack/react-query";
-import { useAppDispatch } from "../hooks/store-hooks";
-import { authActions } from "../features/authentication/auth-slice";
-import { userActions } from "../features/users/user-slice";
+import { useAppDispatch } from "../../../hooks/store-hooks";
+import { authActions } from "../auth-slice";
+import { userActions } from "../../users/user-slice";
 
 const EmailConfirmationPage = () => {
   const dispatch = useAppDispatch();

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { getLocations } from "../../services/ride-service";
+import { getLocations } from "../../../services/ride-service";
 import { useQuery } from "@tanstack/react-query";
 import LocationDropdown from "./LocationDropdown";
-import { Location } from "./types";
+import { Location } from "../types";
 import { useNavigate } from "react-router";
 
 const RideSearch = () => {

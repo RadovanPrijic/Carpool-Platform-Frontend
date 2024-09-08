@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { EmailDTO } from "../features/authentication/types";
+import { EmailDTO } from "../types";
 import classes from "./Auth.module.css";
-import { initiateEmailChange } from "../services/auth-service";
-import { useAppSelector } from "../hooks/store-hooks";
+import { initiateEmailChange } from "../../../services/auth-service";
+import { useAppSelector } from "../../../hooks/store-hooks";
 import { useState } from "react";
 
 const EmailChangePage = () => {
