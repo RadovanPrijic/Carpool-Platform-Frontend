@@ -15,15 +15,24 @@ import {
   isRideList,
 } from "../utils/type-guards";
 
-export async function getFilteredRides(
-  from: string,
-  to: string,
-  date: boolean,
-  seats: number
-): Promise<Ride[]> {
+export interface GetFilteredRidesArgs {
+  from: string;
+  to: string;
+  date: Date;
+  seats: number;
+}
+
+export async function getFilteredRides({
+  from,
+  to,
+  date,
+  seats,
+}: GetFilteredRidesArgs): Promise<Ride[]> {
   try {
     const response = await fetch(
-      `${API_ROUTES.RIDES}/?from=${from}&to=${to}&date=${date}&seats=${seats}`,
+      `${
+        API_ROUTES.RIDES
+      }/?from=${from}&to=${to}&date=${date.toISOString()}&seats=${seats}`,
       {
         method: "GET",
         headers: {
@@ -111,10 +120,15 @@ export async function createRide(rideCreateDTO: RideCreateDTO): Promise<Ride> {
   }
 }
 
-export async function updateRide(
-  id: number,
-  rideUpdateDTO: RideUpdateDTO
-): Promise<Ride> {
+interface UpdateRideArgs {
+  id: number;
+  rideUpdateDTO: RideUpdateDTO;
+}
+
+export async function updateRide({
+  id,
+  rideUpdateDTO,
+}: UpdateRideArgs): Promise<Ride> {
   try {
     const response = await fetch(`${API_ROUTES.RIDES}/${id}`, {
       method: "PUT",

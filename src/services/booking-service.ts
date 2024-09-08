@@ -75,10 +75,15 @@ export async function createBooking(
   }
 }
 
-export async function updateBookingStatus(
-  id: number,
-  bookingUpdateDTO: BookingUpdateDTO
-): Promise<Booking> {
+interface UpdateBookingArgs {
+  id: number;
+  bookingUpdateDTO: BookingUpdateDTO;
+}
+
+export async function updateBooking({
+  id,
+  bookingUpdateDTO,
+}: UpdateBookingArgs): Promise<Booking> {
   try {
     const response = await fetch(`${API_ROUTES.BOOKINGS}/${id}`, {
       method: "PUT",
