@@ -27,6 +27,28 @@ const NotificationsPage = () => {
   });
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const updatedNotifications = await getUserNotifications({
+          id: userId,
+          markAsChecked: false,
+        });
+        dispatch(userActions.updateUserNotifications(updatedNotifications));
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    const interval = setInterval(() => {
+      fetchData();
+    }, 120000);
+
+    fetchData();
+
+    return () => clearInterval(interval);
+  }, [userId, dispatch]);
+
+  useEffect(() => {
     const handleBeforeUnload = () => {
       mutate({ id: userId, markAsChecked: true });
     };
