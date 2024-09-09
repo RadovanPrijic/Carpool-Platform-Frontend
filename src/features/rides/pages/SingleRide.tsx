@@ -35,8 +35,12 @@ const SingleRidePage = () => {
     isRideCreator = true;
   }
 
-  const handleNavigation = () => {
-    navigate(`/rides/edit/${params.id}`);
+  const handleNavigation = (action: string) => {
+    if (action === "edit") {
+      navigate(`/rides/edit/${params.id}`);
+    } else if (action === "review") {
+      navigate(`/rides/review/${params.id}`);
+    }
   };
 
   const handleRideDeletion = () => {
@@ -63,7 +67,8 @@ const SingleRidePage = () => {
         <br></br>
         {isRideCreator && (
           <div>
-            <b onClick={handleNavigation}>Edit ride |</b>
+            <b onClick={() => handleNavigation("edit")}>Edit ride |</b>
+            <b onClick={() => handleNavigation("review")}> Review ride |</b>
             <b onClick={handleRideDeletion}> Delete ride</b>
           </div>
         )}

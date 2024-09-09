@@ -25,6 +25,10 @@ import UserRidesPage from "./features/rides/pages/UserRides";
 import SingleRidePage from "./features/rides/pages/SingleRide";
 import EditRidePage from "./features/rides/pages/EditRide";
 import NewRidePage from "./features/rides/pages/NewRide";
+import GivenReviewsPage from "./features/reviews/pages/GivenReviews";
+import ReceivedReviewsPage from "./features/reviews/pages/ReceivedReviews";
+import NewReviewPage from "./features/reviews/pages/NewReview";
+import EditReviewPage from "./features/reviews/pages/EditReview";
 
 function App() {
   const router = createBrowserRouter(
@@ -49,6 +53,14 @@ function App() {
           <Route path="rides" element={<UserRidesPage />} />
           <Route path="rides/new" element={<NewRidePage />} />
           <Route path="rides/edit/:id" element={<EditRidePage />} />
+
+          <Route path="rides/review/:id" element={<NewReviewPage />} />
+          <Route path="reviews/edit/:id" element={<EditReviewPage />} />
+          <Route path="reviews/given/:id" element={<GivenReviewsPage />} />
+          <Route
+            path="reviews/received/:id"
+            element={<ReceivedReviewsPage />}
+          />
         </Route>
 
         <Route

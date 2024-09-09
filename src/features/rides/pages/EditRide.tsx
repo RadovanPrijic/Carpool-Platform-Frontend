@@ -8,9 +8,12 @@ import {
 } from "../../../services/ride-service";
 import { useParams } from "react-router";
 import LocationDropdown from "../components/LocationDropdown";
+import { queryClient } from "../../../utils/api-config";
+import { useAppSelector } from "../../../hooks/store-hooks";
 
 const EditRidePage = () => {
   const params = useParams();
+  const userId = useAppSelector((state) => state.auth.userId);
 
   const { data: ride } = useQuery({
     queryKey: ["ride", params.id],
@@ -44,6 +47,7 @@ const EditRidePage = () => {
     mutationFn: updateRide,
     onSuccess: (response) => {
       console.log(response);
+      queryClient.invalidateQueries({ queryKey: ["userRides", userId] });
     },
     onError: (error) => {
       console.log(error.message);

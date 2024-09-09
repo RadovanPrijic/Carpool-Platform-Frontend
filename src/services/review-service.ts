@@ -44,6 +44,33 @@ export async function getReviewsForUser(
   }
 }
 
+export async function getReviewById(id: string): Promise<Review> {
+  try {
+    const response = await fetch(`${API_ROUTES.REVIEWS}/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const result: Review | ErrorResponse = await response.json();
+
+    if (isReview(result)) {
+      console.log("Review fetched successfully.");
+      return result;
+    }
+
+    if (isErrorResponse(result)) {
+      throw new Error(result.message);
+    }
+
+    throw new Error("Unexpected response format.");
+  } catch (error) {
+    if (error instanceof Error) throw new Error(error.message);
+    else throw new Error("An unexpected error has occured.");
+  }
+}
+
 export async function createReview(
   reviewCreateDTO: ReviewCreateDTO
 ): Promise<Review> {
@@ -75,10 +102,15 @@ export async function createReview(
   }
 }
 
-export async function updateReview(
-  id: number,
-  reviewUpdateDTO: ReviewUpdateDTO
-): Promise<Review> {
+interface UpdateReviewArgs {
+  id: number;
+  reviewUpdateDTO: ReviewUpdateDTO;
+}
+
+export async function updateReview({
+  id,
+  reviewUpdateDTO,
+}: UpdateReviewArgs): Promise<Review> {
   try {
     const response = await fetch(`${API_ROUTES.REVIEWS}/${id}`, {
       method: "PUT",

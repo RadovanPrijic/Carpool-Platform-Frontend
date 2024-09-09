@@ -10,6 +10,7 @@ import RideSearch from "../features/rides/components/RideSearch";
 const HomePage = () => {
   const token = useLoaderData();
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const userId = useAppSelector((state) => state.auth.userId);
   const currentUser = useAppSelector((state) => state.user.currentUser);
   const dispatch = useAppDispatch();
 
@@ -52,6 +53,11 @@ const HomePage = () => {
       <div>
         <Link to="rides">User rides |</Link>
         <Link to="rides/new"> New ride</Link>
+      </div>
+      <div>
+        <Link to={`reviews/given/${userId}`}>Given reviews |</Link>
+        <Link to={`reviews/received/${userId}`}> Received reviews |</Link>
+        <Link to="reviews/new"> New review</Link>
       </div>
       <div>
         <p>
