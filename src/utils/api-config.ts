@@ -15,9 +15,3 @@ export const queryClient = new QueryClient();
 export interface ErrorResponse {
   message: string;
 }
-
-export interface CreatedAtResponse<T> {
-  methodName: string;
-  id: string | number;
-  createdResource: T;
-}

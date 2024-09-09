@@ -4,13 +4,8 @@ import {
   ReviewCreateDTO,
   ReviewUpdateDTO,
 } from "../features/reviews/types";
-import { API_ROUTES, CreatedAtResponse } from "../utils/api-config";
-import {
-  isCreatedAtResponse,
-  isErrorResponse,
-  isReview,
-  isReviewList,
-} from "../utils/type-guards";
+import { API_ROUTES } from "../utils/api-config";
+import { isErrorResponse, isReview, isReviewList } from "../utils/type-guards";
 import { getAuthToken } from "../utils/auth";
 
 export async function getReviewsForUser(
@@ -62,13 +57,11 @@ export async function createReview(
       body: JSON.stringify(reviewCreateDTO),
     });
 
-    const result: CreatedAtResponse<Review> | ErrorResponse =
-      await response.json();
+    const result: Review | ErrorResponse = await response.json();
 
-    if (isCreatedAtResponse<Review>(result, isReview)) {
+    if (isReview(result)) {
       console.log("Your review has been successfully created.");
-      console.log(result.createdResource);
-      return result.createdResource;
+      return result;
     }
 
     if (isErrorResponse(result)) {

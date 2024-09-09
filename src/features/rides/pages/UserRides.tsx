@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getAllRidesForUser } from "../../../services/ride-service";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { Link } from "react-router-dom";
+import { addHours } from "../../../utils/add-hours";
 
 const UserRidesPage = () => {
   const userId = useAppSelector((state) => state.auth.userId);
@@ -32,7 +33,8 @@ const UserRidesPage = () => {
           {rides.map((ride) => (
             <li key={ride.id}>
               <Link to={`${ride.id}`}>
-                {ride.id} {ride.departureTime} {ride.pricePerSeat} RSD
+                {ride.id} {addHours(ride.departureTime, 4)} {ride.pricePerSeat}{" "}
+                RSD
               </Link>
             </li>
           ))}

@@ -6,15 +6,17 @@ interface LocationDropdownProps {
   label: string;
   setSelectedLocation: React.Dispatch<React.SetStateAction<Location | null>>;
   locations: Location[];
+  defaultValue?: string;
 }
 
 const LocationDropdown: React.FC<LocationDropdownProps> = ({
   label,
   setSelectedLocation,
   locations,
+  defaultValue,
 }) => {
   const [filteredLocations, setFilteredLocations] = useState<Location[]>([]);
-  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>(defaultValue ?? "");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;

@@ -5,7 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import RideSortAndFilter from "../components/RideSortAndFilter";
 import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { ridesActions } from "../rides-slice";
-import { addTwoHours } from "../../../utils/date-function";
+import { addHours } from "../../../utils/add-hours";
 
 const FilteredRidesPage = () => {
   const [searchParams] = useSearchParams();
@@ -21,8 +21,8 @@ const FilteredRidesPage = () => {
     mutationFn: getFilteredRides,
     onSuccess: async (filteredRidesList) => {
       const updatedRides = filteredRidesList.map((ride) => {
-        const updatedDepartureTime = addTwoHours(ride.departureTime);
-        const updatedCreatedAt = addTwoHours(ride.createdAt);
+        const updatedDepartureTime = addHours(ride.departureTime, 4);
+        const updatedCreatedAt = addHours(ride.createdAt, 4);
         return {
           ...ride,
           departureTime: updatedDepartureTime,

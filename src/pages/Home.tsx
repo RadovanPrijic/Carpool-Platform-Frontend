@@ -51,6 +51,7 @@ const HomePage = () => {
       </div>
       <div>
         <Link to="rides">User rides |</Link>
+        <Link to="rides/new"> New ride</Link>
       </div>
       <div>
         <p>

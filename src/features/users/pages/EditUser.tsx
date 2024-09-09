@@ -67,10 +67,7 @@ const EditUserPage = () => {
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const userUpdateDTO: UserUpdateDTO = {
-      ...formData,
-    };
-    mutate({ id, userUpdateDTO });
+    mutate({ id, userUpdateDTO: formData });
   };
 
   return (

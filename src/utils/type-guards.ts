@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Picture, User } from "../features/users/types";
 import { LoginResponseDTO } from "../features/authentication/types";
-import { CreatedAtResponse, ErrorResponse } from "./api-config";
+import { ErrorResponse } from "./api-config";
 import { Message } from "../features/messages/types";
 import { Location, Ride } from "../features/rides/types";
 import { Review } from "../features/reviews/types";
@@ -146,15 +147,4 @@ export function isLocation(data: any): data is Location {
 
 export function isLocationList(data: any): data is Location[] {
   return Array.isArray(data) && data.every(isLocation);
-}
-
-export function isCreatedAtResponse<T>(
-  data: any,
-  isT: (data: any) => data is T
-): data is CreatedAtResponse<T> {
-  return (
-    typeof data.methodName === "string" &&
-    (typeof data.id === "string" || typeof data.id === "number") &&
-    isT(data.createdResource)
-  );
 }

@@ -23,6 +23,8 @@ import ProfilePicturePage from "./features/users/pages/ProfilePicture";
 import FilteredRidesPage from "./features/rides/pages/FilteredRides";
 import UserRidesPage from "./features/rides/pages/UserRides";
 import SingleRidePage from "./features/rides/pages/SingleRide";
+import EditRidePage from "./features/rides/pages/EditRide";
+import NewRidePage from "./features/rides/pages/NewRide";
 
 function App() {
   const router = createBrowserRouter(
@@ -45,7 +47,8 @@ function App() {
           />
 
           <Route path="rides" element={<UserRidesPage />} />
-          <Route path="rides/:id" element={<SingleRidePage />} />
+          <Route path="rides/new" element={<NewRidePage />} />
+          <Route path="rides/edit/:id" element={<EditRidePage />} />
         </Route>
 
         <Route
@@ -54,6 +57,7 @@ function App() {
         />
         <Route path="password-reset" element={<PasswordResetPage />} />
         <Route path="filtered-rides" element={<FilteredRidesPage />} />
+        <Route path="rides/:id" element={<SingleRidePage />} />
       </>
     )
   );

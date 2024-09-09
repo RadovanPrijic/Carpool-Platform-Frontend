@@ -48,10 +48,7 @@ const RegistrationPage = () => {
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const registrationRequestDTO: RegistrationRequestDTO = {
-      ...formData,
-    };
-    mutate(registrationRequestDTO);
+    mutate(formData);
   };
 
   return (

@@ -1,9 +1,9 @@
-export const addTwoHours = (isoString: string): string => {
+export const addHours = (isoString: string, addedHours: number): string => {
   // Convert the ISO string to a Date object
   const date = new Date(isoString);
 
   // Add two hours to the date
-  date.setHours(date.getHours() + 4);
+  date.setHours(date.getHours() + addedHours);
 
   // Get the year, month, day, hours, minutes, and seconds separately
   const year = date.getUTCFullYear();

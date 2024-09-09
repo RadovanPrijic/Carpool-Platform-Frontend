@@ -5,10 +5,9 @@ import {
   RideCreateDTO,
   RideUpdateDTO,
 } from "../features/rides/types";
-import { API_ROUTES, CreatedAtResponse } from "../utils/api-config";
+import { API_ROUTES } from "../utils/api-config";
 import { getAuthToken } from "../utils/auth";
 import {
-  isCreatedAtResponse,
   isErrorResponse,
   isLocationList,
   isRide,
@@ -131,13 +130,11 @@ export async function createRide(rideCreateDTO: RideCreateDTO): Promise<Ride> {
       body: JSON.stringify(rideCreateDTO),
     });
 
-    const result: CreatedAtResponse<Ride> | ErrorResponse =
-      await response.json();
+    const result: Ride | ErrorResponse = await response.json();
 
-    if (isCreatedAtResponse<Ride>(result, isRide)) {
+    if (isRide(result)) {
       console.log("Your ride has been successfully created.");
-      console.log(result.createdResource);
-      return result.createdResource;
+      return result;
     }
 
     if (isErrorResponse(result)) {

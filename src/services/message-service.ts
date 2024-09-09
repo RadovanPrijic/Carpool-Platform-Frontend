@@ -4,10 +4,9 @@ import {
   MessageCreateDTO,
   MessageUpdateDTO,
 } from "../features/messages/types";
-import { API_ROUTES, CreatedAtResponse } from "../utils/api-config";
+import { API_ROUTES } from "../utils/api-config";
 import { getAuthToken } from "../utils/auth";
 import {
-  isCreatedAtResponse,
   isErrorResponse,
   isMessage,
   isMessageList,
@@ -61,13 +60,11 @@ export async function sendMessage(
       body: JSON.stringify(messageCreateDTO),
     });
 
-    const result: CreatedAtResponse<Message> | ErrorResponse =
-      await response.json();
+    const result: Message | ErrorResponse = await response.json();
 
-    if (isCreatedAtResponse<Message>(result, isMessage)) {
+    if (isMessage(result)) {
       console.log("Your message has been successfully sent.");
-      console.log(result.createdResource);
-      return result.createdResource;
+      return result;
     }
 
     if (isErrorResponse(result)) {

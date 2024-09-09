@@ -4,12 +4,11 @@ import {
   BookingCreateDTO,
   BookingUpdateDTO,
 } from "../features/bookings/types";
-import { API_ROUTES, CreatedAtResponse } from "../utils/api-config";
+import { API_ROUTES } from "../utils/api-config";
 import { getAuthToken } from "../utils/auth";
 import {
   isBooking,
   isBookingList,
-  isCreatedAtResponse,
   isErrorResponse,
 } from "../utils/type-guards";
 
@@ -55,13 +54,11 @@ export async function createBooking(
       body: JSON.stringify(bookingCreateDTO),
     });
 
-    const result: CreatedAtResponse<Booking> | ErrorResponse =
-      await response.json();
+    const result: Booking | ErrorResponse = await response.json();
 
-    if (isCreatedAtResponse<Booking>(result, isBooking)) {
+    if (isBooking(result)) {
       console.log("Your booking has been successfully created.");
-      console.log(result.createdResource);
-      return result.createdResource;
+      return result;
     }
 
     if (isErrorResponse(result)) {
