@@ -48,7 +48,8 @@ const HomePage = () => {
         <Link to="profile-picture"> Profile picture |</Link>
         <Link to="edit-user"> Edit user </Link>
         <Link to="change-email">| Change email |</Link>
-        <Link to="initiate-password-reset"> Reset password</Link>
+        <Link to="initiate-password-reset"> Reset password |</Link>
+        <Link to="user/notifications"> Notifications</Link>
       </div>
       <div>
         <Link to="rides">User rides |</Link>
@@ -64,7 +65,17 @@ const HomePage = () => {
           CURRENT AUTH STATE:
           {isAuthenticated ? " Authenticated" : " Not authenticated"} | CURRENT
           USER:
-          {currentUser ? ` ${currentUser.firstName}` : " Nobody's home"}
+          {currentUser ? ` ${currentUser.firstName}` : " Nobody's home"} |
+          NOTIFICATIONS:{" "}
+          {isAuthenticated && (
+            <>
+              {
+                currentUser?.notifications.filter(
+                  (n) => n.checkedStatus === false
+                ).length
+              }
+            </>
+          )}
         </p>
       </div>
       <RideSearch />

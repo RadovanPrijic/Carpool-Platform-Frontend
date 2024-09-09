@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Picture, User } from "./types";
+import { Notification, Picture, User } from "./types";
 
 interface UserState {
   currentUser?: User;
@@ -27,6 +27,9 @@ export const userSlice = createSlice({
     },
     deleteProfilePicture: (state) => {
       state.currentUser!.picture = undefined;
+    },
+    updateUserNotifications: (state, action: PayloadAction<Notification[]>) => {
+      state.currentUser!.notifications = action.payload;
     },
   },
 });

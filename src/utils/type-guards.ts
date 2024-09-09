@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Picture, User } from "../features/users/types";
+import { Notification, Picture, User } from "../features/users/types";
 import { LoginResponseDTO } from "../features/authentication/types";
 import { ErrorResponse } from "./api-config";
 import { Message } from "../features/messages/types";

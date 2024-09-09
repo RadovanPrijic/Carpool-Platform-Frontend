@@ -13,7 +13,7 @@ export interface User {
   petsPrefs?: string;
   createdAt: Date;
   picture?: Picture;
-  notifications?: Notification[];
+  notifications: Notification[];
 }
 
 export interface UserUpdateDTO {

@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
+import { useAppSelector } from "../../../hooks/store-hooks";
 import { initiateEmailConfirmation } from "../../../services/auth-service";
 
 const UserProfilePage = () => {

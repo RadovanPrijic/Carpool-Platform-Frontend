@@ -1,7 +1,7 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { getReviewById, updateReview } from "../../../services/review-service";
-import { useParams } from "react-router";
-import { ReviewUpdateDTO } from "../types";
+import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router";
+import { Review, ReviewUpdateDTO } from "../types";
 import { useState } from "react";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { queryClient } from "../../../utils/api-config";
@@ -9,11 +9,12 @@ import { queryClient } from "../../../utils/api-config";
 const EditReviewPage = () => {
   const params = useParams();
   const userId = useAppSelector((state) => state.auth.userId);
+  const review = useLoaderData() as Review;
 
-  const { data: review } = useQuery({
-    queryKey: ["review", params.id],
-    queryFn: () => getReviewById(params.id!),
-  });
+  // const { data: review } = useQuery({
+  //   queryKey: ["review", params.id],
+  //   queryFn: () => getReviewById(params.id!),
+  // });
 
   const [formData, setFormData] = useState<ReviewUpdateDTO>({
     rating: review?.rating ?? 1,
@@ -76,5 +77,15 @@ const EditReviewPage = () => {
     </form>
   );
 };
+
+export async function loader({ params }: LoaderFunctionArgs) {
+  if (!params.id) {
+    throw new Error("Review ID is required.");
+  }
+  return queryClient.fetchQuery<Review>({
+    queryKey: ["review", params.id],
+    queryFn: () => getReviewById(params.id!),
+  });
+}
 
 export default EditReviewPage;

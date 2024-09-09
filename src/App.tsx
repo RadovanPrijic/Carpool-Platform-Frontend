@@ -29,47 +29,69 @@ import GivenReviewsPage from "./features/reviews/pages/GivenReviews";
 import ReceivedReviewsPage from "./features/reviews/pages/ReceivedReviews";
 import NewReviewPage from "./features/reviews/pages/NewReview";
 import EditReviewPage from "./features/reviews/pages/EditReview";
+import { loader as reviewLoader } from "./features/reviews/pages/EditReview";
+import RootLayout from "./pages/RootLayout";
+import NotificationsPage from "./features/users/pages/Notifications";
 
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <>
-        <Route path="/" element={<HomePage />} loader={tokenLoader} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegistrationPage />} />
-
-        <Route element={<ProtectedRoute />}>
-          <Route path="logout" element={<LogoutPage />} />
-          <Route path="edit-user" element={<EditUserPage />} />
-
-          <Route path="user-profile" element={<UserProfilePage />} />
-          <Route path="profile-picture" element={<ProfilePicturePage />} />
-          <Route path="change-email" element={<EmailChangePage />} />
+        <Route path="/" element={<RootLayout />}>
+          <Route path="" element={<HomePage />} loader={tokenLoader} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegistrationPage />} />
           <Route
-            path="email-confirmation"
-            element={<EmailConfirmationPage />}
+            path="initiate-password-reset"
+            element={<InitiatePasswordResetPage />}
           />
+          <Route path="password-reset" element={<PasswordResetPage />} />
 
-          <Route path="rides" element={<UserRidesPage />} />
-          <Route path="rides/new" element={<NewRidePage />} />
-          <Route path="rides/edit/:id" element={<EditRidePage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="user">
+              <Route path="edit" element={<EditUserPage />} />
+              <Route path="profile" element={<UserProfilePage />}></Route>
+              <Route path="profile-picture" element={<ProfilePicturePage />} />
+              <Route path="change-email" element={<EmailChangePage />} />
+              <Route
+                path="email-confirmation"
+                element={<EmailConfirmationPage />}
+              />
+              <Route path="notifications" element={<NotificationsPage />} />
+              <Route path="logout" element={<LogoutPage />} />
+            </Route>
+          </Route>
 
-          <Route path="rides/review/:id" element={<NewReviewPage />} />
-          <Route path="reviews/edit/:id" element={<EditReviewPage />} />
-          <Route path="reviews/given/:id" element={<GivenReviewsPage />} />
-          <Route
-            path="reviews/received/:id"
-            element={<ReceivedReviewsPage />}
-          />
+          <Route path="rides">
+            <Route path="filtered" element={<FilteredRidesPage />} />
+            <Route path=":id" element={<SingleRidePage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route index element={<UserRidesPage />} />
+              <Route path="new" element={<NewRidePage />} />
+              <Route path="edit/:id" element={<EditRidePage />} />
+              <Route path="review/:id" element={<NewReviewPage />} />
+            </Route>
+          </Route>
+
+          <Route path="reviews">
+            <Route path="received/:id" element={<ReceivedReviewsPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="given/:id" element={<GivenReviewsPage />} />
+              <Route
+                path="edit/:id"
+                element={<EditReviewPage />}
+                loader={reviewLoader}
+              />
+            </Route>
+          </Route>
+
+          <Route path="bookings">
+            <Route element={<ProtectedRoute />}>
+              <Route path="user" />
+              <Route path="others" />
+            </Route>
+          </Route>
         </Route>
-
-        <Route
-          path="initiate-password-reset"
-          element={<InitiatePasswordResetPage />}
-        />
-        <Route path="password-reset" element={<PasswordResetPage />} />
-        <Route path="filtered-rides" element={<FilteredRidesPage />} />
-        <Route path="rides/:id" element={<SingleRidePage />} />
       </>
     )
   );

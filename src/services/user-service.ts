@@ -5,7 +5,12 @@ import {
   isPicture,
   isUser,
 } from "../utils/type-guards";
-import { Picture, User, UserUpdateDTO } from "../features/users/types";
+import {
+  Notification,
+  Picture,
+  User,
+  UserUpdateDTO,
+} from "../features/users/types";
 import { getAuthToken } from "../utils/auth";
 
 export async function getUserById(id: string): Promise<User> {
@@ -75,10 +80,15 @@ export async function updateUser({
   }
 }
 
-export async function getUserNotifications(
-  id: string,
-  markAsChecked: boolean
-): Promise<Notification[]> {
+interface GetUserNotificationArgs {
+  id: string;
+  markAsChecked: boolean;
+}
+
+export async function getUserNotifications({
+  id,
+  markAsChecked,
+}: GetUserNotificationArgs): Promise<Notification[]> {
   try {
     const response = await fetch(`${API_ROUTES.USERS}/notifications/${id}`, {
       method: `${markAsChecked ? "PUT" : "GET"}`,
