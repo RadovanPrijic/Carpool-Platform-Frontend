@@ -49,7 +49,8 @@ const HomePage = () => {
         <Link to="edit-user"> Edit user </Link>
         <Link to="change-email">| Change email |</Link>
         <Link to="initiate-password-reset"> Reset password |</Link>
-        <Link to="user/notifications"> Notifications</Link>
+        <Link to="user/notifications"> Notifications |</Link>
+        <Link to={`user/messages/inbox/${userId}`}> Inbox</Link>
       </div>
       <div>
         <Link to="rides">User rides |</Link>

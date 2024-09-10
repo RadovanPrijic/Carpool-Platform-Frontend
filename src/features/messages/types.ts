@@ -22,6 +22,5 @@ export interface MessageCreateDTO {
 }
 
 export interface MessageUpdateDTO {
-  content?: string;
-  readStatus: boolean;
+  content: string;
 }

@@ -34,6 +34,7 @@ import RootLayout from "./pages/RootLayout";
 import NotificationsPage from "./features/users/pages/Notifications";
 import InboxPage from "./features/messages/pages/Inbox";
 import ChatPage from "./features/messages/pages/Chat";
+import { loader as inboxLoader } from "./features/messages/pages/Inbox";
 
 function App() {
   const router = createBrowserRouter(
@@ -60,8 +61,12 @@ function App() {
                 element={<EmailConfirmationPage />}
               />
               <Route path="messages">
-                <Route path="inbox" element={<InboxPage />} />
-                <Route path="chat" element={<ChatPage />} />
+                <Route
+                  path="inbox/:id"
+                  element={<InboxPage />}
+                  loader={inboxLoader}
+                />
+                <Route path="chat/:id" element={<ChatPage />} />
               </Route>
               <Route path="notifications" element={<NotificationsPage />} />
               <Route path="logout" element={<LogoutPage />} />
