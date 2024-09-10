@@ -2,7 +2,7 @@
 import { Notification, Picture, User } from "../features/users/types";
 import { LoginResponseDTO } from "../features/authentication/types";
 import { ErrorResponse } from "./api-config";
-import { Message } from "../features/messages/types";
+import { Conversation, Message } from "../features/messages/types";
 import { Location, Ride } from "../features/rides/types";
 import { Review } from "../features/reviews/types";
 import { Booking } from "../features/bookings/types";
@@ -111,13 +111,25 @@ export function isMessage(data: any): data is Message {
     typeof data.content === "string" &&
     typeof data.readStatus === "boolean" &&
     new Date(data.createdAt) instanceof Date &&
-    typeof data.senderId === "string" &&
-    typeof data.receiverId === "string"
+    isUser(data.sender) &&
+    isUser(data.receiver)
   );
 }
 
 export function isMessageList(data: any): data is Message[] {
   return Array.isArray(data) && data.every(isMessage);
+}
+
+export function isConversation(data: any): data is Conversation {
+  return (
+    isUser(data.user) &&
+    isMessage(data.lastMessage) &&
+    typeof data.unreadMessagesCount === "number"
+  );
+}
+
+export function isConversationList(data: any): data is Conversation[] {
+  return Array.isArray(data) && data.every(isConversation);
 }
 
 export function isPicture(data: any): data is Picture {

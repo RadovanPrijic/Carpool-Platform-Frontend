@@ -43,8 +43,6 @@ const NotificationsPage = () => {
       fetchData();
     }, 120000);
 
-    fetchData();
-
     return () => clearInterval(interval);
   }, [userId, dispatch]);
 

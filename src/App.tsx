@@ -32,6 +32,8 @@ import EditReviewPage from "./features/reviews/pages/EditReview";
 import { loader as reviewLoader } from "./features/reviews/pages/EditReview";
 import RootLayout from "./pages/RootLayout";
 import NotificationsPage from "./features/users/pages/Notifications";
+import InboxPage from "./features/messages/pages/Inbox";
+import ChatPage from "./features/messages/pages/Chat";
 
 function App() {
   const router = createBrowserRouter(
@@ -57,6 +59,10 @@ function App() {
                 path="email-confirmation"
                 element={<EmailConfirmationPage />}
               />
+              <Route path="messages">
+                <Route path="inbox" element={<InboxPage />} />
+                <Route path="chat" element={<ChatPage />} />
+              </Route>
               <Route path="notifications" element={<NotificationsPage />} />
               <Route path="logout" element={<LogoutPage />} />
             </Route>
