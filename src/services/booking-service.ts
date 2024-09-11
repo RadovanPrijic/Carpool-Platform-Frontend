@@ -12,9 +12,44 @@ import {
   isErrorResponse,
 } from "../utils/type-guards";
 
-export async function getAllBookingsForUser(id: string): Promise<Booking[]> {
+export async function getFilteredBookings(
+  id: string,
+  filter: string
+): Promise<Booking[]> {
   try {
-    const response = await fetch(`${API_ROUTES.BOOKINGS}/all/${id}`, {
+    const response = await fetch(
+      `${API_ROUTES.BOOKINGS}/filtered/${id}?filter=${filter}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${getAuthToken()}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const result: Booking[] | ErrorResponse = await response.json();
+    console.log(result);
+
+    if (isBookingList(result)) {
+      console.log("Filtered bookings fetched successfully.");
+      return result;
+    }
+
+    if (isErrorResponse(result)) {
+      throw new Error(result.message);
+    }
+
+    throw new Error("Unexpected response format.");
+  } catch (error) {
+    if (error instanceof Error) throw new Error(error.message);
+    else throw new Error("An unexpected error has occured.");
+  }
+}
+
+export async function getAllBookingsForRide(id: string): Promise<Booking[]> {
+  try {
+    const response = await fetch(`${API_ROUTES.BOOKINGS}/for-ride/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${getAuthToken()}`,

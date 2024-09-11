@@ -60,9 +60,7 @@ export function isRide(data: any): data is Ride {
     typeof data.insuranceStatus === "boolean" &&
     typeof data.automaticBooking === "boolean" &&
     new Date(data.createdAt) instanceof Date &&
-    isUser(data.user) &&
-    Array.isArray(data.bookings) &&
-    data.bookings.every(isBooking)
+    isUser(data.user)
   );
 }
 
@@ -79,7 +77,7 @@ export function isBooking(data: any): data is Booking {
     new Date(data.createdAt) instanceof Date &&
     (data.updatedAt === null || new Date(data.updatedAt) instanceof Date) &&
     isUser(data.user) &&
-    typeof data.rideId === "number" &&
+    isRide(data.ride) &&
     (data.review === null || isReview(data.review))
   );
 }

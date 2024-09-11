@@ -21,8 +21,8 @@ const NewReviewPage = () => {
     reviewerId: userId,
     revieweeId: ride?.user.id ?? "",
     rideId: ride?.id ?? 0,
-    bookingId:
-      ride?.bookings.find((booking) => booking.user.id === userId)?.id ?? 0,
+    bookingId: 0,
+    // ride?.bookings.find((booking) => booking.user.id === userId)?.id ?? 0, FIX THIS!!!!!!!!!!!!!!!!!!
   });
 
   const { mutate } = useMutation({

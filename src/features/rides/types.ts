@@ -1,4 +1,3 @@
-import { Booking } from "../bookings/types";
 import { User } from "../users/types";
 
 export interface Ride {
@@ -16,7 +15,6 @@ export interface Ride {
   automaticBooking: boolean;
   createdAt: string;
   user: User;
-  bookings: Booking[];
 }
 
 export interface RideCreateDTO {

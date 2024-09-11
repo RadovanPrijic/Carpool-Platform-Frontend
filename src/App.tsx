@@ -35,6 +35,7 @@ import NotificationsPage from "./features/users/pages/Notifications";
 import InboxPage from "./features/messages/pages/Inbox";
 import ChatPage from "./features/messages/pages/Chat";
 import { loader as inboxLoader } from "./features/messages/pages/Inbox";
+import BookingsPage from "./features/bookings/pages/Bookings";
 
 function App() {
   const router = createBrowserRouter(
@@ -98,8 +99,7 @@ function App() {
 
           <Route path="bookings">
             <Route element={<ProtectedRoute />}>
-              <Route path="user" />
-              <Route path="others" />
+              <Route path=":id" element={<BookingsPage />} />
             </Route>
           </Route>
         </Route>

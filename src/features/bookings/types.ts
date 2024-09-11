@@ -1,4 +1,5 @@
 import { Review } from "../reviews/types";
+import { Ride } from "../rides/types";
 import { User } from "../users/types";
 
 export interface Booking {
@@ -6,10 +7,10 @@ export interface Booking {
   bookingStatus: string;
   seatsBooked: number;
   totalPrice: number;
-  createdAt: Date;
-  updatedAt?: Date;
+  createdAt: string;
+  updatedAt?: string;
   user: User;
-  rideId: number;
+  ride: Ride;
   review?: Review;
 }
 

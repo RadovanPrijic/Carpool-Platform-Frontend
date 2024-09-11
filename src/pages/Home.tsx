@@ -54,7 +54,8 @@ const HomePage = () => {
       </div>
       <div>
         <Link to="rides">User rides |</Link>
-        <Link to="rides/new"> New ride</Link>
+        <Link to="rides/new"> New ride |</Link>
+        <Link to={`bookings/${userId}`}> Bookings</Link>
       </div>
       <div>
         <Link to={`reviews/given/${userId}`}>Given reviews |</Link>
