@@ -1,8 +1,8 @@
 .modal {
-  color: black;
+  color: rgb(44, 42, 42);
   padding: 20px;
   background-color: white;
-  border-radius: 8px;
+  border-radius: 25px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
   width: 400px;
   max-width: 100%;
@@ -11,6 +11,10 @@
 
 .dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  margin-bottom: 20px;
 }
 
 .modal-actions {

@@ -14,30 +14,12 @@ import { useNavigate } from "react-router";
 import Modal, { ModalHandle } from "../../../components/Modal";
 
 const BookingsPage = () => {
+  const [filter, setFilter] = useState<string>("by-user-requested");
+  const [messageContent, setMessageContent] = useState<string>("");
   const userId = useAppSelector((state) => state.auth.userId);
   const deadlineDateTime = new Date(addHours(new Date().toISOString(), 1));
-  const [filter, setFilter] = useState<string>("by-user-requested");
-  const navigate = useNavigate();
-  const [messageContent, setMessageContent] = useState<string>("");
-
   const modalRef = useRef<ModalHandle>(null);
-
-  const openModal = () => {
-    modalRef.current!.open();
-  };
-
-  const closeModal = () => {
-    modalRef.current!.close();
-  };
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMessageContent(event.target.value);
-  };
-
-  const handleConfirm = (senderId: string, receiverId: string) => {
-    dispatchMessage({ content: messageContent, senderId, receiverId });
-    modalRef.current!.close();
-  };
+  const navigate = useNavigate();
 
   const {
     data: bookings,
@@ -83,6 +65,23 @@ const BookingsPage = () => {
       console.log(error.message);
     },
   });
+
+  const openModal = () => {
+    modalRef.current!.open();
+  };
+
+  const closeModal = () => {
+    modalRef.current!.close();
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessageContent(event.target.value);
+  };
+
+  const handleConfirm = (senderId: string, receiverId: string) => {
+    dispatchMessage({ content: messageContent, senderId, receiverId });
+    modalRef.current!.close();
+  };
 
   const handleReviewClick = (id: number) => {
     navigate(`/rides/review/${id}`);
@@ -195,8 +194,13 @@ const BookingsPage = () => {
               <div>
                 {/* The Modal component */}
                 <Modal
-                  title="Message someone"
-                  message="Type in your msg broski"
+                  title={`Message ${
+                    filter.includes("by-user")
+                      ? booking.ride.user!.firstName +
+                        " " +
+                        booking.ride.user!.lastName
+                      : booking.user.firstName + " " + booking.user.lastName
+                  }`}
                   ref={modalRef}
                   onCancel={closeModal}
                   onConfirm={() =>
@@ -209,8 +213,7 @@ const BookingsPage = () => {
                   }
                 >
                   <label htmlFor="message">Message</label>
-                  <input
-                    type="text"
+                  <textarea
                     id="message"
                     name="message"
                     value={messageContent}

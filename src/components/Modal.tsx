@@ -4,7 +4,6 @@ import classes from "./Modal.module.css";
 
 interface ModalProps {
   title: string;
-  message: string;
   children: React.ReactNode;
   onCancel: () => void;
   onConfirm: () => void;
@@ -16,7 +15,7 @@ export interface ModalHandle {
 }
 
 const Modal = forwardRef<ModalHandle, ModalProps>(
-  ({ title, message, children, onCancel, onConfirm }, ref) => {
+  ({ title, children, onCancel, onConfirm }, ref) => {
     const dialogRef = useRef<HTMLDialogElement | null>(null);
 
     useImperativeHandle(ref, () => ({
@@ -44,9 +43,8 @@ const Modal = forwardRef<ModalHandle, ModalProps>(
 
     return createPortal(
       <dialog className={classes["modal"]} ref={dialogRef} onClose={onCancel}>
-        <h2>{title}</h2>
-        <p>{message}</p>
-        <div>{children}</div>
+        <h3>{title}</h3>
+        <div className={classes["modal-content"]}>{children}</div>
         <div className={classes["modal-actions"]}>
           <button onClick={onCancel}>Close</button>
           <button onClick={onConfirm}>Confirm</button>

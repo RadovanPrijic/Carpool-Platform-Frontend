@@ -45,14 +45,14 @@ function App() {
           <Route path="" element={<HomePage />} loader={tokenLoader} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegistrationPage />} />
-          <Route
-            path="initiate-password-reset"
-            element={<InitiatePasswordResetPage />}
-          />
-          <Route path="password-reset" element={<PasswordResetPage />} />
 
-          <Route element={<ProtectedRoute />}>
-            <Route path="user">
+          <Route path="user">
+            <Route
+              path="initiate-password-reset"
+              element={<InitiatePasswordResetPage />}
+            />
+            <Route path="password-reset" element={<PasswordResetPage />} />
+            <Route element={<ProtectedRoute />}>
               <Route path="edit" element={<EditUserPage />} />
               <Route path="profile" element={<UserProfilePage />}></Route>
               <Route path="profile-picture" element={<ProfilePicturePage />} />

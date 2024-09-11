@@ -16,9 +16,9 @@ const LoginPage = () => {
     email: "",
     password: "",
   });
-
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const { mutate } = useMutation({
     mutationFn: login,
     onSuccess: async (loginResponse) => {
@@ -47,11 +47,9 @@ const LoginPage = () => {
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     const loginRequestDTO: LoginRequestDTO = {
       ...formData,
     };
-
     mutate(loginRequestDTO);
   };
 

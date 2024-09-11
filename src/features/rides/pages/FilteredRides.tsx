@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getFilteredRides } from "../../../services/ride-service";
 import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -16,6 +16,7 @@ const FilteredRidesPage = () => {
   const rides = useAppSelector((state) => state.rides.rides);
   const filteredRides = useAppSelector((state) => state.rides.filteredRides);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const { mutate, isPending, isError } = useMutation({
     mutationFn: getFilteredRides,
@@ -58,6 +59,7 @@ const FilteredRidesPage = () => {
           {filteredRides!.map((ride) => (
             <li key={ride.id}>
               {ride.id} {ride.departureTime} {ride.pricePerSeat} RSD
+              <b onClick={() => navigate(`/rides/${ride.id}`)}> | Go to ride</b>
             </li>
           ))}
         </ul>

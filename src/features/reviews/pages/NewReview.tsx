@@ -5,6 +5,7 @@ import { createReview } from "../../../services/review-service";
 import { useState } from "react";
 import { useParams } from "react-router";
 import { getRideById } from "../../../services/ride-service";
+import { getAllBookingsForRide } from "../../../services/booking-service";
 
 const NewReviewPage = () => {
   const params = useParams();
@@ -15,14 +16,18 @@ const NewReviewPage = () => {
     queryFn: () => getRideById(parseInt(params.id!)),
   });
 
+  const { data: bookings } = useQuery({
+    queryKey: ["ride-bookings", params.id],
+    queryFn: () => getAllBookingsForRide(parseInt(params.id!)),
+  });
+
   const [formData, setFormData] = useState<ReviewCreateDTO>({
     rating: 1,
     comment: "",
     reviewerId: userId,
     revieweeId: ride?.user.id ?? "",
     rideId: ride?.id ?? 0,
-    bookingId: 0,
-    // ride?.bookings.find((booking) => booking.user.id === userId)?.id ?? 0, FIX THIS!!!!!!!!!!!!!!!!!!
+    bookingId: bookings?.find((booking) => booking.user.id === userId)?.id ?? 0,
   });
 
   const { mutate } = useMutation({

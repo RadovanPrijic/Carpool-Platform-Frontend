@@ -47,7 +47,7 @@ export async function getFilteredBookings(
   }
 }
 
-export async function getAllBookingsForRide(id: string): Promise<Booking[]> {
+export async function getAllBookingsForRide(id: number): Promise<Booking[]> {
   try {
     const response = await fetch(`${API_ROUTES.BOOKINGS}/for-ride/${id}`, {
       method: "GET",

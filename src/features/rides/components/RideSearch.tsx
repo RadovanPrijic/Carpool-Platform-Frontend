@@ -25,7 +25,7 @@ const RideSearch = () => {
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     navigate(
-      `/filtered-rides?from=${
+      `/rides/filtered?from=${
         startLocation!.city + ", " + startLocation!.country
       }&to=${
         endLocation!.city + ", " + endLocation!.country

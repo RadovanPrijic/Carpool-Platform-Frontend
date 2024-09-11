@@ -3,11 +3,19 @@ import { deleteRide, getRideById } from "../../../services/ride-service";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { queryClient } from "../../../utils/api-config";
+import {
+  createBooking,
+  getAllBookingsForRide,
+} from "../../../services/booking-service";
+import { useRef, useState } from "react";
+import Modal, { ModalHandle } from "../../../components/Modal";
 
 const SingleRidePage = () => {
   const params = useParams();
   const navigate = useNavigate();
   const userId = useAppSelector((state) => state.auth.userId);
+  const [numberOfSeats, setNumberOfSeats] = useState<number>(1);
+  const modalRef = useRef<ModalHandle>(null);
   let isRideCreator: boolean = false;
 
   const {
@@ -20,11 +28,26 @@ const SingleRidePage = () => {
     queryFn: () => getRideById(parseInt(params.id!)),
   });
 
+  const { data: bookings, error: erorito } = useQuery({
+    queryKey: ["ride-bookings", params.id],
+    queryFn: () => getAllBookingsForRide(parseInt(params.id!)),
+  });
+
   const { mutate } = useMutation({
     mutationFn: deleteRide,
     onSuccess: async (response) => {
       console.log(response);
       queryClient.invalidateQueries({ queryKey: ["userRides", userId] });
+    },
+    onError: (error) => {
+      console.log(error.message);
+    },
+  });
+
+  const { mutate: bookRide } = useMutation({
+    mutationFn: createBooking,
+    onSuccess: async (response) => {
+      console.log(response);
     },
     onError: (error) => {
       console.log(error.message);
@@ -48,8 +71,32 @@ const SingleRidePage = () => {
     navigate("/rides");
   };
 
+  const openModal = () => {
+    modalRef.current!.open();
+  };
+
+  const closeModal = () => {
+    modalRef.current!.close();
+  };
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNumberOfSeats(parseInt(event.target.value));
+  };
+
+  const handleConfirm = (
+    totalPrice: number,
+    userId: string,
+    rideId: number
+  ) => {
+    bookRide({ seatsBooked: numberOfSeats, totalPrice, userId, rideId });
+    modalRef.current!.close();
+  };
+
   let content;
 
+  if (erorito) {
+    console.log(erorito.message);
+  }
   if (isLoading) {
     content = <p>Loading rides ...</p>;
   }
@@ -72,6 +119,37 @@ const SingleRidePage = () => {
             <b onClick={handleRideDeletion}> Delete ride</b>
           </div>
         )}
+        {ride.seatsAvailable >
+        bookings!.filter((booking) => booking.bookingStatus == "accepted")
+          .length ? (
+          <>
+            <b onClick={openModal}>Book</b>
+            <div>
+              <Modal
+                title="Ride booking"
+                ref={modalRef}
+                onCancel={closeModal}
+                onConfirm={() =>
+                  handleConfirm(
+                    ride.pricePerSeat * numberOfSeats,
+                    userId,
+                    ride.id
+                  )
+                }
+              >
+                <label htmlFor="seats">Number of seats</label>
+                <input
+                  type="number"
+                  id="seats"
+                  name="seats"
+                  value={numberOfSeats}
+                  onChange={handleInputChange}
+                  required
+                />
+              </Modal>
+            </div>
+          </>
+        ) : null}
       </div>
     );
   }

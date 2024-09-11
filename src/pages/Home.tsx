@@ -41,14 +41,14 @@ const HomePage = () => {
       <div>
         <Link to="register">Register |</Link>
         <Link to="login"> Login </Link>
-        <Link to="logout">| Logout </Link>
+        <Link to="user/logout">| Logout </Link>
       </div>
       <div>
-        <Link to="user-profile">User profile |</Link>
-        <Link to="profile-picture"> Profile picture |</Link>
-        <Link to="edit-user"> Edit user </Link>
-        <Link to="change-email">| Change email |</Link>
-        <Link to="initiate-password-reset"> Reset password |</Link>
+        <Link to="user/profile">User profile |</Link>
+        <Link to="user/profile-picture"> Profile picture |</Link>
+        <Link to="user/edit"> Edit user </Link>
+        <Link to="user/change-email">| Change email |</Link>
+        <Link to="user/initiate-password-reset"> Reset password |</Link>
         <Link to="user/notifications"> Notifications |</Link>
         <Link to={`user/messages/inbox/${userId}`}> Inbox</Link>
       </div>
