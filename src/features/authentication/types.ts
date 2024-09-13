@@ -4,7 +4,7 @@ export interface RegistrationRequestDTO {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  birthDate: Date;
+  birthDate: string;
   profileBio?: string;
   chattinessPrefs?: string;
   musicPrefs?: string;
