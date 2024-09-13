@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router";
 import { useAppDispatch } from "../../../hooks/store-hooks.ts";
 import { login } from "../../../services/auth-service.ts";
-import classes from "./Auth.module.css";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { LoginRequestDTO } from "../types.ts";
@@ -10,6 +9,8 @@ import { userActions } from "../../users/user-slice.ts";
 import { getUserById } from "../../../services/user-service.ts";
 import { jwtDecode } from "jwt-decode";
 import { MyJwtPayload } from "../../../utils/auth.ts";
+import Input from "../../../components/Input.tsx";
+import Button from "../../../components/Button.tsx";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<LoginRequestDTO>({
@@ -19,15 +20,15 @@ const LoginPage = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { mutate } = useMutation({
+  const { mutate: tryLogin } = useMutation({
     mutationFn: login,
-    onSuccess: async (loginResponse) => {
-      const decoded = jwtDecode<MyJwtPayload>(loginResponse.token);
-      localStorage.setItem("token", loginResponse.token);
+    onSuccess: async (loginResponseData) => {
+      const decoded = jwtDecode<MyJwtPayload>(loginResponseData.token);
+      localStorage.setItem("token", loginResponseData.token);
       localStorage.setItem("expiration", decoded.exp.toString());
       dispatch(
         authActions.login({
-          emailConfirmationStatus: loginResponse.emailConfirmed,
+          emailConfirmationStatus: loginResponseData.emailConfirmed,
           id: decoded.nameid,
         })
       );
@@ -47,42 +48,33 @@ const LoginPage = () => {
 
   const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const loginRequestDTO: LoginRequestDTO = {
-      ...formData,
-    };
-    mutate(loginRequestDTO);
+    tryLogin(formData);
   };
 
   return (
-    <main className={classes.auth}>
-      <section>
-        <form onSubmit={handleLogin}>
-          <div className={classes.control}>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              required
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              required
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-            />
-          </div>
-          <button>Login</button>
-        </form>
-      </section>
-    </main>
+    <form onSubmit={handleLogin}>
+      <Input
+        label="Email address"
+        id="email"
+        name="email"
+        type="email"
+        value={formData.email}
+        onChange={handleInputChange}
+        placeholder="Enter your email address ..."
+        required
+      />
+      <Input
+        label="Password"
+        id="password"
+        name="password"
+        type="password"
+        value={formData.password}
+        onChange={handleInputChange}
+        placeholder="Enter your password ..."
+        required
+      />
+      <Button label="Log in" type="submit" />
+    </form>
   );
 };
 

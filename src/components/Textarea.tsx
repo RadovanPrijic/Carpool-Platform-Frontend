@@ -3,27 +3,29 @@ import React, { ChangeEvent } from "react";
 interface TextareaProps {
   label: string;
   id: string;
+  name: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder?: string;
   required?: boolean;
   rows?: number;
   cols?: number;
-  name?: string;
   disabled?: boolean;
+  [key: string]: any;
 }
 
 const Textarea: React.FC<TextareaProps> = ({
   label,
+  id,
+  name,
   value,
   onChange,
   placeholder = "",
   required = false,
   rows = 10,
   cols = 30,
-  id,
-  name,
   disabled = false,
+  ...rest
 }) => {
   return (
     <div className="textarea-group">
@@ -39,6 +41,7 @@ const Textarea: React.FC<TextareaProps> = ({
         cols={cols}
         disabled={disabled}
         className="textarea-field"
+        {...rest}
       />
     </div>
   );

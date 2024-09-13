@@ -7,57 +7,53 @@ import { authActions } from "../auth-slice";
 import { userActions } from "../../users/user-slice";
 
 const EmailConfirmationPage = () => {
-  const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
-  const id = searchParams.get("userId");
+  const userId = searchParams.get("userId");
   const confirmationToken = searchParams.get("confirmationToken");
   const changeToken = searchParams.get("changeToken");
   const newEmail = searchParams.get("newEmail");
+  const dispatch = useAppDispatch();
 
-  const { mutate, isSuccess, isError } = useMutation({
+  const {
+    mutate: tryConfirmEmail,
+    isSuccess,
+    isError,
+  } = useMutation({
     mutationFn: confirmEmail,
-    onSuccess: async (response) => {
-      console.log(response);
+    onSuccess: () => {
       if (confirmationToken) {
         dispatch(authActions.confirmEmail());
       } else {
         dispatch(userActions.changeUserEmail(newEmail!));
       }
     },
-    onError: (error) => {
-      console.log(error.message);
-    },
   });
 
   useEffect(() => {
-    if (id && confirmationToken) {
-      console.log(confirmationToken);
-      mutate({
-        id,
+    if (userId && confirmationToken) {
+      tryConfirmEmail({
+        id: userId,
         confirmationToken: encodeURIComponent(confirmationToken),
         emailChange: false,
       });
-    } else if (id && changeToken && newEmail) {
-      mutate({
-        id,
+    } else if (userId && changeToken && newEmail) {
+      tryConfirmEmail({
+        id: userId,
         confirmationToken: encodeURIComponent(changeToken),
         emailChange: true,
         newEmail,
       });
     }
-  }, [id, confirmationToken, changeToken, newEmail, mutate]);
+  }, [userId, confirmationToken, changeToken, newEmail, tryConfirmEmail]);
 
   return (
-    <>
-      <div>
-        <p>
-          Your email has been:
-          {confirmationToken && isSuccess && " CONFIRMED."}
-          {changeToken && isSuccess && " CHANGED."}
-          {isError && " SENT TO THE SHADOW REALM."}
-        </p>
-      </div>
-    </>
+    <div>
+      Your email has
+      {confirmationToken && isSuccess && " been confirmed."}
+      {changeToken && isSuccess && " been changed."}
+      {confirmationToken && isError && " not been confirmed."}
+      {changeToken && isError && " not been changed."}
+    </div>
   );
 };
 

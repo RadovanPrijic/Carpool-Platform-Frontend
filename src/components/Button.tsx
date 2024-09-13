@@ -2,10 +2,11 @@ import React from "react";
 
 interface ButtonProps {
   label: string;
-  onClick: () => void;
+  onClick?: () => void;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
   className?: string;
+  [key: string]: any;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -14,6 +15,7 @@ const Button: React.FC<ButtonProps> = ({
   type = "button",
   disabled = false,
   className = "",
+  ...rest
 }) => {
   return (
     <button
@@ -21,6 +23,7 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       disabled={disabled}
       className={`btn ${className}`}
+      {...rest}
     >
       {label}
     </button>

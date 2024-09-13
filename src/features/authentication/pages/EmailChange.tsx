@@ -1,22 +1,25 @@
 import { useMutation } from "@tanstack/react-query";
 import { EmailDTO } from "../types";
-import classes from "./Auth.module.css";
 import { initiateEmailChange } from "../../../services/auth-service";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { useState } from "react";
+import Input from "../../../components/Input";
+import Button from "../../../components/Button";
+
+const initialFormData: EmailDTO = {
+  email: "",
+  newEmail: "",
+  newEmailConfirmation: "",
+};
 
 const EmailChangePage = () => {
-  const [formData, setFormData] = useState<EmailDTO>({
-    email: "",
-    newEmail: "",
-    newEmailConfirmation: "",
-  });
-  const id = useAppSelector((state) => state.auth.userId);
+  const [formData, setFormData] = useState<EmailDTO>(initialFormData);
+  const userId = useAppSelector((state) => state.auth.userId);
 
-  const { mutate } = useMutation({
+  const { mutate: tryInitiateEmailChange } = useMutation({
     mutationFn: initiateEmailChange,
-    onSuccess: async (response) => {
-      console.log(response);
+    onSuccess: () => {
+      setFormData(initialFormData);
     },
   });
 
@@ -28,57 +31,47 @@ const EmailChangePage = () => {
     }));
   };
 
-  const handleEmailChange = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleInitiateEmailChange = (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault();
-    const emailDTO: EmailDTO = {
-      ...formData,
-    };
-    mutate({ id, emailDTO });
+    tryInitiateEmailChange({ id: userId, emailDTO: formData });
   };
 
   return (
-    <main className={classes.auth}>
-      <section>
-        <form onSubmit={handleEmailChange}>
-          <div className={classes.control}>
-            <label htmlFor="email">Current email address</label>
-            <input
-              type="email"
-              required
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="new-email">New email address</label>
-            <input
-              type="email"
-              required
-              id="new-email"
-              name="newEmail"
-              value={formData.newEmail}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="new-email-confirmation">
-              New email address confirmation
-            </label>
-            <input
-              type="email"
-              required
-              id="new-email-confirmation"
-              name="newEmailConfirmation"
-              value={formData.newEmailConfirmation}
-              onChange={handleInputChange}
-            />
-          </div>
-          <button>Change email</button>
-        </form>
-      </section>
-    </main>
+    <form onSubmit={handleInitiateEmailChange}>
+      <Input
+        label="Current email address"
+        id="current-email"
+        name="email"
+        type="email"
+        value={formData.email}
+        onChange={handleInputChange}
+        placeholder="Enter your current email address ..."
+        required
+      />
+      <Input
+        label="New email address"
+        id="new-email"
+        name="newEmail"
+        type="email"
+        value={formData.newEmail}
+        onChange={handleInputChange}
+        placeholder="Enter your new email address ..."
+        required
+      />
+      <Input
+        label="New email address confirmation"
+        id="new-email-confirmation"
+        name="newEmailConfirmation"
+        type="email"
+        value={formData.newEmailConfirmation}
+        onChange={handleInputChange}
+        placeholder="Repeat your new email address ..."
+        required
+      />
+      <Button label="Send change link" type="submit" />
+    </form>
   );
 };
 

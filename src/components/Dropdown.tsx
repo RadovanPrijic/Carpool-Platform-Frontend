@@ -1,4 +1,5 @@
 import React from "react";
+import classes from "./Dropdown.module.css";
 
 interface Option {
   label: string;
@@ -8,26 +9,29 @@ interface Option {
 interface DropdownProps {
   label: string;
   id: string;
+  name: string;
   options: Option[];
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   placeholder?: string;
-  name?: string;
+
   disabled?: boolean;
+  [key: string]: any;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
   label,
+  id,
+  name,
   options,
   value,
   onChange,
   placeholder = "Select an option",
-  id,
-  name,
   disabled = false,
+  ...rest
 }) => {
   return (
-    <div className="dropdown-group">
+    <div className={classes["dropdown-group"]}>
       <label htmlFor={id}>{label}</label>
       <select
         id={id}
@@ -35,7 +39,8 @@ const Dropdown: React.FC<DropdownProps> = ({
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className="dropdown"
+        className={classes["dropdown"]}
+        {...rest}
       >
         <option value="">{placeholder}</option>
         {options.map((option) => (

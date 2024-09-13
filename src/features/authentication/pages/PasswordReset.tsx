@@ -1,27 +1,27 @@
 import { useSearchParams } from "react-router-dom";
-import classes from "./Auth.module.css";
 import { useMutation } from "@tanstack/react-query";
 import { resetPassword } from "../../../services/auth-service";
 import { useState } from "react";
 import { PasswordDTO } from "../types";
+import Button from "../../../components/Button";
+import Input from "../../../components/Input";
+
+const initialFormData: PasswordDTO = {
+  password: "",
+  newPassword: "",
+  newPasswordConfirmation: "",
+};
 
 const PasswordResetPage = () => {
+  const [formData, setFormData] = useState<PasswordDTO>(initialFormData);
   const [searchParams] = useSearchParams();
   const email = searchParams.get("userEmail");
   const resetToken = searchParams.get("resetToken");
-  const [formData, setFormData] = useState<PasswordDTO>({
-    password: "",
-    newPassword: "",
-    newPasswordConfirmation: "",
-  });
 
-  const { mutate, isSuccess, isError } = useMutation({
+  const { mutate: tryResetPassword } = useMutation({
     mutationFn: resetPassword,
-    onSuccess: async (response) => {
-      console.log(response);
-    },
-    onError: (error) => {
-      console.log(error.message);
+    onSuccess: () => {
+      setFormData(initialFormData);
     },
   });
 
@@ -33,70 +33,51 @@ const PasswordResetPage = () => {
     }));
   };
 
-  const handlePasswordChange = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleResetPassword = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const passwordDTO: PasswordDTO = {
-      ...formData,
-    };
     if (email && resetToken) {
-      mutate({
+      tryResetPassword({
         email,
         resetToken: encodeURIComponent(resetToken),
-        passwordDTO,
+        passwordDTO: formData,
       });
     }
   };
 
   return (
-    <main className={classes.auth}>
-      <section>
-        <form onSubmit={handlePasswordChange}>
-          <div className={classes.control}>
-            <label htmlFor="password">Current password</label>
-            <input
-              type="password"
-              required
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="new-password">New password</label>
-            <input
-              type="password"
-              required
-              id="new-password"
-              name="newPassword"
-              value={formData.newPassword}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="new-password-confirmation">
-              New password confirmation
-            </label>
-            <input
-              type="password"
-              required
-              id="new-password-confirmation"
-              name="newPasswordConfirmation"
-              value={formData.newPasswordConfirmation}
-              onChange={handleInputChange}
-            />
-          </div>
-          <button>Change password</button>
-        </form>
-      </section>
-      <div style={{ color: "red" }}>
-        <p>
-          Your password has been:
-          {resetToken && isSuccess && " CHANGED."}
-          {isError && " SENT TO THE SHADOW REALM."}
-        </p>
-      </div>
-    </main>
+    <form onSubmit={handleResetPassword}>
+      <Input
+        label="Current password"
+        id="current-password"
+        name="password"
+        type="password"
+        value={formData.password}
+        onChange={handleInputChange}
+        placeholder="Enter your current password ..."
+        required
+      />
+      <Input
+        label="New password"
+        id="new-password"
+        name="newPassword"
+        type="password"
+        value={formData.newPassword}
+        onChange={handleInputChange}
+        placeholder="Enter your new password ..."
+        required
+      />
+      <Input
+        label="New password confirmation"
+        id="new-password-confirmation"
+        name="newPasswordConfirmation"
+        type="password"
+        value={formData.newPasswordConfirmation}
+        onChange={handleInputChange}
+        placeholder="Repeat your new password ..."
+        required
+      />
+      <Button label="Change password" type="submit" />
+    </form>
   );
 };
 
