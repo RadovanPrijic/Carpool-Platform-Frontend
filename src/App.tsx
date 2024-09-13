@@ -37,6 +37,7 @@ import ChatPage from "./features/messages/pages/Chat";
 import { loader as inboxLoader } from "./features/messages/pages/Inbox";
 import BookingsPage from "./features/bookings/pages/Bookings";
 import { loader as userLoader } from "./features/users/pages/UserProfile";
+import { loader as rideLoader } from "./features/reviews/pages/NewReview";
 
 function App() {
   const router = createBrowserRouter(
@@ -86,7 +87,11 @@ function App() {
               <Route index element={<UserRidesPage />} />
               <Route path="new" element={<NewRidePage />} />
               <Route path="edit/:id" element={<EditRidePage />} />
-              <Route path="review/:id" element={<NewReviewPage />} />
+              <Route
+                path="review/:id"
+                element={<NewReviewPage />}
+                loader={rideLoader}
+              />
             </Route>
           </Route>
 

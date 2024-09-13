@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
 import { getReviewsForUser } from "../../../services/review-service";
+import ReviewComponent from "../components/ReviewComponent";
 
 const GivenReviewsPage = () => {
   const params = useParams();
@@ -11,7 +12,7 @@ const GivenReviewsPage = () => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["given-reviews", params.id!],
+    queryKey: ["given-reviews", params.id!, true],
     queryFn: () => getReviewsForUser(params.id!, true),
   });
 
@@ -20,24 +21,19 @@ const GivenReviewsPage = () => {
   };
 
   let content;
-
   if (isLoading) {
-    content = <p>Loading rides ...</p>;
-  }
-
-  if (error) {
-    content = <p>Error! {error.message}</p>;
-  }
-
-  if (givenReviews) {
+    content = <p>Loading ...</p>;
+  } else if (error) {
+    content = <p>Error!</p>;
+  } else if (givenReviews) {
     content = (
       <>
         <ul>
           {givenReviews.map((review) => (
-            <li key={review.id}>
-              {review.id} {review.comment} {review.rating} {review.ride.user.id}
-              <b onClick={() => handleNavigation(review.id)}>Edit review</b>
-            </li>
+            <ReviewComponent
+              review={review}
+              onEdit={() => handleNavigation(review.id)}
+            />
           ))}
         </ul>
       </>
@@ -45,12 +41,12 @@ const GivenReviewsPage = () => {
   }
 
   return (
-    <section>
+    <>
       <header>
         <h2>Given reviews</h2>
       </header>
       {content}
-    </section>
+    </>
   );
 };
 

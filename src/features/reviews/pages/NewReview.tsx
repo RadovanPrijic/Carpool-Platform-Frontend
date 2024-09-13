@@ -1,42 +1,43 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { ReviewCreateDTO } from "../types";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { createReview } from "../../../services/review-service";
 import { useState } from "react";
-import { useParams } from "react-router";
+import { LoaderFunctionArgs, useLoaderData } from "react-router";
 import { getRideById } from "../../../services/ride-service";
 import { getAllBookingsForRide } from "../../../services/booking-service";
+import ReviewForm from "../components/ReviewForm";
+import { queryClient } from "../../../utils/api-config";
+import { Ride } from "../../rides/types";
+import { Booking } from "../../bookings/types";
 
 const NewReviewPage = () => {
-  const params = useParams();
+  const { ride, bookings } = useLoaderData() as {
+    ride: Ride;
+    bookings: Booking[];
+  };
   const userId = useAppSelector((state) => state.auth.userId);
 
-  const { data: ride } = useQuery({
-    queryKey: ["ride", params.id],
-    queryFn: () => getRideById(parseInt(params.id!)),
-  });
-
-  const { data: bookings } = useQuery({
-    queryKey: ["ride-bookings", params.id],
-    queryFn: () => getAllBookingsForRide(parseInt(params.id!)),
-  });
-
-  const [formData, setFormData] = useState<ReviewCreateDTO>({
+  const initialState: ReviewCreateDTO = {
     rating: 1,
     comment: "",
     reviewerId: userId,
-    revieweeId: ride?.user.id ?? "",
-    rideId: ride?.id ?? 0,
-    bookingId: bookings?.find((booking) => booking.user.id === userId)?.id ?? 0,
-  });
+    revieweeId: ride.user.id,
+    rideId: ride.id,
+    bookingId: bookings.find((booking) => booking.user.id === userId)?.id ?? 0,
+  };
+  const [formData, setFormData] = useState<ReviewCreateDTO>(initialState);
 
-  const { mutate } = useMutation({
+  const { mutate: tryCreateReview } = useMutation({
     mutationFn: createReview,
-    onSuccess: (response) => {
-      console.log(response);
-    },
-    onError: (error) => {
-      console.log(error.message);
+    onSuccess: () => {
+      setFormData(initialState);
+      queryClient.invalidateQueries({
+        queryKey: ["received-reviews", userId, false],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["given-reviews", userId, true],
+      });
     },
   });
 
@@ -50,40 +51,40 @@ const NewReviewPage = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleCreateReview = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate(formData);
+    tryCreateReview(formData);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="rating">Price Per Seat</label>
-        <input
-          type="number"
-          id="rating"
-          name="rating"
-          value={formData.rating}
-          min={1}
-          max={5}
-          onChange={handleInputChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="comment">Comment</label>
-        <textarea
-          id="comment"
-          name="comment"
-          value={formData.comment}
-          onChange={handleInputChange}
-          maxLength={1000}
-          required
-        />
-      </div>
-      <button type="submit">Create Review</button>
-    </form>
+    <ReviewForm
+      comment={formData.comment}
+      rating={formData.rating}
+      type="create"
+      onChange={handleInputChange}
+      onSubmit={handleCreateReview}
+    />
   );
 };
+
+export async function loader({ params }: LoaderFunctionArgs) {
+  if (!params.id) {
+    throw new Error("Ride ID parameter is required.");
+  }
+  const rideId = parseInt(params.id);
+
+  const [ride, bookings] = await Promise.all([
+    queryClient.fetchQuery<Ride>({
+      queryKey: ["ride", rideId],
+      queryFn: () => getRideById(rideId),
+    }),
+    queryClient.fetchQuery<Booking[]>({
+      queryKey: ["ride-bookings", rideId],
+      queryFn: () => getAllBookingsForRide(rideId),
+    }),
+  ]);
+
+  return { ride, bookings };
+}
 
 export default NewReviewPage;

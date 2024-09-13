@@ -5,30 +5,26 @@ import { Review, ReviewUpdateDTO } from "../types";
 import { useState } from "react";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { queryClient } from "../../../utils/api-config";
+import ReviewForm from "../components/ReviewForm";
 
 const EditReviewPage = () => {
-  const params = useParams();
-  const userId = useAppSelector((state) => state.auth.userId);
   const review = useLoaderData() as Review;
-
-  // const { data: review } = useQuery({
-  //   queryKey: ["review", params.id],
-  //   queryFn: () => getReviewById(params.id!),
-  // });
-
   const [formData, setFormData] = useState<ReviewUpdateDTO>({
-    rating: review?.rating ?? 1,
-    comment: review?.comment ?? "",
+    rating: review.rating,
+    comment: review.comment,
   });
+  const userId = useAppSelector((state) => state.auth.userId);
+  const params = useParams();
 
-  const { mutate } = useMutation({
+  const { mutate: tryUpdateReview } = useMutation({
     mutationFn: updateReview,
-    onSuccess: (response) => {
-      console.log(response);
-      queryClient.invalidateQueries({ queryKey: ["given-reviews", userId] });
-    },
-    onError: (error) => {
-      console.log(error.message);
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["received-reviews", userId, false],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["given-reviews", userId, true],
+      });
     },
   });
 
@@ -42,49 +38,31 @@ const EditReviewPage = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleUpdateReview = (e: React.FormEvent) => {
     e.preventDefault();
-    mutate({ id: parseInt(params.id!), reviewUpdateDTO: formData });
+    tryUpdateReview({ id: parseInt(params.id!), reviewUpdateDTO: formData });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="rating">Price Per Seat</label>
-        <input
-          type="number"
-          id="rating"
-          name="rating"
-          value={formData.rating}
-          min={1}
-          max={5}
-          onChange={handleInputChange}
-          required
-        />
-      </div>
-      <div>
-        <label htmlFor="comment">Comment</label>
-        <textarea
-          id="comment"
-          name="comment"
-          value={formData.comment}
-          onChange={handleInputChange}
-          maxLength={1000}
-          required
-        />
-      </div>
-      <button type="submit">Edit Review</button>
-    </form>
+    <ReviewForm
+      comment={formData.comment}
+      rating={formData.rating}
+      type="update"
+      onChange={handleInputChange}
+      onSubmit={handleUpdateReview}
+    />
   );
 };
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (!params.id) {
-    throw new Error("Review ID is required.");
+    throw new Error("Review ID parameter is required.");
   }
+  const reviewId = params.id;
+
   return queryClient.fetchQuery<Review>({
-    queryKey: ["review", params.id],
-    queryFn: () => getReviewById(params.id!),
+    queryKey: ["review", reviewId],
+    queryFn: () => getReviewById(reviewId),
   });
 }
 

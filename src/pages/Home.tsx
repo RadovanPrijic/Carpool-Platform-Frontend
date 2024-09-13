@@ -60,7 +60,6 @@ const HomePage = () => {
       <div>
         <Link to={`reviews/given/${userId}`}>Given reviews |</Link>
         <Link to={`reviews/received/${userId}`}> Received reviews |</Link>
-        <Link to="reviews/new"> New review</Link>
       </div>
       <div>
         <p>
