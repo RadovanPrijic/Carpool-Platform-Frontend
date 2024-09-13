@@ -4,91 +4,81 @@ import { getUserNotifications } from "../../../services/user-service";
 import { useEffect } from "react";
 import { queryClient } from "../../../utils/api-config";
 import { userActions } from "../user-slice";
+import NotificationComponent from "../components/Notification";
 
 const NotificationsPage = () => {
-  const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.auth.userId);
+  const dispatch = useAppDispatch();
 
   const {
     data: notifications,
+    refetch: refetchNotifications,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["notifications", userId],
+    queryKey: ["notifications", { id: userId, markAsChecked: false }],
     queryFn: () => getUserNotifications({ id: userId, markAsChecked: false }),
   });
 
-  const { mutate } = useMutation({
+  const { mutate: tryMarkNotificationsAsRead } = useMutation({
     mutationFn: getUserNotifications,
     onSuccess: (updatedNotifications) => {
-      queryClient.invalidateQueries({ queryKey: ["notifications", userId] });
+      queryClient.invalidateQueries({
+        queryKey: ["notifications", { id: userId, markAsChecked: false }],
+      });
       dispatch(userActions.updateUserNotifications(updatedNotifications));
     },
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const updatedNotifications = await getUserNotifications({
-          id: userId,
-          markAsChecked: false,
-        });
-        dispatch(userActions.updateUserNotifications(updatedNotifications));
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
+    const refetchData = async () => {
+      const { data: refetchedNotifications } = await refetchNotifications();
+      if (userId && refetchedNotifications) {
+        dispatch(userActions.updateUserNotifications(refetchedNotifications));
       }
     };
 
     const interval = setInterval(() => {
-      fetchData();
+      refetchData();
     }, 120000);
 
     return () => clearInterval(interval);
-  }, [userId, dispatch]);
+  }, [userId, refetchNotifications, dispatch]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
-      mutate({ id: userId, markAsChecked: true });
+      tryMarkNotificationsAsRead({ id: userId, markAsChecked: true });
     };
     window.addEventListener("beforeunload", handleBeforeUnload);
+
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
-      mutate({ id: userId, markAsChecked: true });
+      tryMarkNotificationsAsRead({ id: userId, markAsChecked: true });
     };
-  }, [userId, mutate]);
+  }, [userId, tryMarkNotificationsAsRead]);
 
   let content;
-
   if (isLoading) {
-    content = <p>Loading rides ...</p>;
-  }
-
-  if (error) {
-    content = <p>Error! {error.message}</p>;
-  }
-
-  if (notifications) {
+    content = <p>Loading ...</p>;
+  } else if (error) {
+    content = <p>Error!</p>;
+  } else if (notifications) {
     content = (
-      <>
-        <ul>
-          {notifications.map((notification) => (
-            <li key={notification.id}>
-              {notification.id} {notification.message}{" "}
-              {notification.checkedStatus}
-            </li>
-          ))}
-        </ul>
-      </>
+      <ul>
+        {notifications.map((notification) => (
+          <NotificationComponent notification={notification} />
+        ))}
+      </ul>
     );
   }
 
   return (
-    <section>
+    <>
       <header>
         <h2>Notifications</h2>
       </header>
       {content}
-    </section>
+    </>
   );
 };
 

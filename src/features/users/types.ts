@@ -4,14 +4,14 @@ export interface User {
   lastName: string;
   email: string;
   phoneNumber: string;
-  birthDate: Date;
+  birthDate: string;
   profileBio?: string;
   rating?: number;
   chattinessPrefs?: string;
   musicPrefs?: string;
   smokingPrefs?: string;
   petsPrefs?: string;
-  createdAt: Date;
+  createdAt: string;
   picture?: Picture;
   notifications: Notification[];
 }
@@ -20,7 +20,7 @@ export interface UserUpdateDTO {
   firstName: string;
   lastName: string;
   phoneNumber: string;
-  birthDate: Date;
+  birthDate: string;
   profileBio?: string;
   chattinessPrefs?: string;
   musicPrefs?: string;
@@ -32,7 +32,7 @@ export interface Notification {
   id: number;
   message: string;
   checkedStatus: boolean;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface Picture {

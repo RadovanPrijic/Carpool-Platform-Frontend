@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { useMutation } from "@tanstack/react-query";
 import { userActions } from "../user-slice";
@@ -6,30 +6,29 @@ import {
   deleteProfilePicture,
   uploadProfilePicture,
 } from "../../../services/user-service";
-import classes from "./Auth.module.css";
+import Button from "../../../components/Button";
+import Input from "../../../components/Input";
 
 const ProfilePicturePage = () => {
-  const dispatch = useAppDispatch();
   const userId = useAppSelector((state) => state.auth.userId);
   const userProfilePicture = useAppSelector(
     (state) => state.user.currentUser!.picture
   );
-  const profilePictureRef = useRef<HTMLInputElement | null>(null);
+  const [profilePictureInput, setProfilePictureInput] =
+    useState<HTMLInputElement | null>(null);
+  const dispatch = useAppDispatch();
 
-  const { mutate: upload } = useMutation({
+  const { mutate: tryUploadProfilePicture } = useMutation({
     mutationFn: uploadProfilePicture,
-    onSuccess: async (picture) => {
+    onSuccess: (picture) => {
+      setProfilePictureInput(null);
       dispatch(userActions.uploadProfilePicture(picture));
-    },
-    onError: (error) => {
-      console.log(error.message);
     },
   });
 
-  const { mutate: clearPicture } = useMutation({
+  const { mutate: tryDeleteProfilePicture } = useMutation({
     mutationFn: deleteProfilePicture,
-    onSuccess: async (response) => {
-      console.log(response);
+    onSuccess: () => {
       dispatch(userActions.deleteProfilePicture());
     },
     onError: (error) => {
@@ -37,46 +36,50 @@ const ProfilePicturePage = () => {
     },
   });
 
-  const handleProfilePictureUpload = (event: React.FormEvent) => {
-    event.preventDefault();
-    const formData = new FormData();
-    formData.append("file", profilePictureRef.current!.files![0]);
-    console.log(formData);
-    upload({ file: formData, userId });
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setProfilePictureInput(event.target);
   };
 
-  const handleProfilePictureDeletion = () => {
-    clearPicture(userProfilePicture!.id);
+  const handleUploadProfilePicture = (event: React.FormEvent) => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append("file", profilePictureInput!.files![0]);
+    tryUploadProfilePicture({ file: formData, userId });
+  };
+
+  const handleDeleteProfilePicture = () => {
+    tryDeleteProfilePicture(userProfilePicture!.id);
   };
 
   return (
-    <main className={classes.auth}>
-      <section>
-        <form onSubmit={handleProfilePictureUpload}>
-          <div className={classes.control}>
-            <label htmlFor="profile-picture">Profile picture</label>
-            <input
-              type="file"
-              required
-              id="profile-picture"
-              name="profile-picture"
-              ref={profilePictureRef}
-            />
-          </div>
-          <button>Upload your new profile picture</button>
-        </form>
-        <button onClick={handleProfilePictureDeletion}>
-          Delete profile picture
-        </button>
-      </section>
-      {userProfilePicture !== undefined && (
-        <img
-          src={userProfilePicture.filePath}
-          alt="Profile picture"
-          style={{ width: "150px", height: "150px" }}
+    <>
+      <form onSubmit={handleUploadProfilePicture}>
+        <Input
+          label="Profile picture"
+          id="profile-picture"
+          name="profilePicture"
+          type="file"
+          value={profilePictureInput?.value ?? ""}
+          onChange={handleInputChange}
+          required
         />
+        <Button label="Upload picture" type="submit" />
+      </form>
+      {userProfilePicture && (
+        <div>
+          <Button label="Delete picture" onClick={handleDeleteProfilePicture} />
+        </div>
       )}
-    </main>
+      {userProfilePicture && (
+        <div>
+          <img
+            src={userProfilePicture.filePath}
+            alt="Profile picture"
+            style={{ width: "150px", height: "150px" }}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

@@ -36,6 +36,7 @@ import InboxPage from "./features/messages/pages/Inbox";
 import ChatPage from "./features/messages/pages/Chat";
 import { loader as inboxLoader } from "./features/messages/pages/Inbox";
 import BookingsPage from "./features/bookings/pages/Bookings";
+import { loader as userLoader } from "./features/users/pages/UserProfile";
 
 function App() {
   const router = createBrowserRouter(
@@ -52,9 +53,13 @@ function App() {
               element={<InitiatePasswordResetPage />}
             />
             <Route path="password-reset" element={<PasswordResetPage />} />
+            <Route
+              path="profile/:id"
+              element={<UserProfilePage />}
+              loader={userLoader}
+            ></Route>
             <Route element={<ProtectedRoute />}>
               <Route path="edit" element={<EditUserPage />} />
-              <Route path="profile" element={<UserProfilePage />}></Route>
               <Route path="profile-picture" element={<ProfilePicturePage />} />
               <Route path="change-email" element={<EmailChangePage />} />
               <Route

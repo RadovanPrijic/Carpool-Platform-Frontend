@@ -44,7 +44,7 @@ const HomePage = () => {
         <Link to="user/logout">| Logout </Link>
       </div>
       <div>
-        <Link to="user/profile">User profile |</Link>
+        <Link to={`user/profile/${userId}`}>User profile |</Link>
         <Link to="user/profile-picture"> Profile picture |</Link>
         <Link to="user/edit"> Edit user </Link>
         <Link to="user/change-email">| Change email |</Link>
