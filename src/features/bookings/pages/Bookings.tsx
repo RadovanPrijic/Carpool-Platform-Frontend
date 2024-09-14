@@ -3,7 +3,8 @@ import { useState } from "react";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { getFilteredBookings } from "../../../services/booking-service";
 import BookingsFilter from "../components/BookingsFilter";
-import BookingsList from "../components/BookingsList";
+import BookingComponent from "../components/Booking";
+import { Booking } from "../types";
 
 const BookingsPage = () => {
   const [filter, setFilter] = useState<string>("by-user-requested");
@@ -28,18 +29,22 @@ const BookingsPage = () => {
   } else if (error) {
     content = <p>Error!</p>;
   } else if (bookings) {
-    content = <BookingsList bookings={bookings} filter={filter} />;
+    content = (
+      <ul>
+        {bookings.map((booking: Booking) => (
+          <BookingComponent booking={booking} filter={filter} />
+        ))}
+      </ul>
+    );
   }
 
   return (
     <div>
-      <>
-        <header>
-          <h2>Bookings</h2>
-        </header>
-        <BookingsFilter filter={filter} onChange={handleFilterChange} />
-        {content}
-      </>
+      <header>
+        <h2>Bookings</h2>
+      </header>
+      <BookingsFilter filter={filter} onChange={handleFilterChange} />
+      {content}
     </div>
   );
 };

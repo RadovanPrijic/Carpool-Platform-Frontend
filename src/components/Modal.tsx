@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
 import classes from "./Modal.module.css";
+import Button from "./Button";
 
 interface ModalProps {
   title: string;
@@ -46,8 +47,8 @@ const Modal = forwardRef<ModalHandle, ModalProps>(
         <h3>{title}</h3>
         <div className={classes["modal-content"]}>{children}</div>
         <div className={classes["modal-actions"]}>
-          <button onClick={onCancel}>Close</button>
-          <button onClick={onConfirm}>Confirm</button>
+          <Button label="Close" onClick={onCancel} />
+          <Button label="Confirm" onClick={onConfirm} />
         </div>
       </dialog>,
       document.getElementById("modal") as HTMLElement

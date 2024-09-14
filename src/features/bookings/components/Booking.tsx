@@ -32,6 +32,9 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
     mutationFn: sendMessage,
     onSuccess: (sentMessage) => {
       queryClient.invalidateQueries({
+        queryKey: ["inbox", userId],
+      });
+      queryClient.invalidateQueries({
         queryKey: ["conversation-messages", userId, sentMessage.receiver.id],
       });
     },

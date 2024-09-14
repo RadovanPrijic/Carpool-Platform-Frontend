@@ -11,9 +11,8 @@ import { queryClient } from "../../../utils/api-config";
 const InboxPage = () => {
   const conversations = useLoaderData() as Conversation[];
   const navigate = useNavigate();
-  console.log(conversations);
 
-  const openChat = (otherUserId: string) => {
+  const handleNavigation = (otherUserId: string) => {
     navigate(`/user/messages/chat/${otherUserId}`);
   };
 
@@ -23,9 +22,9 @@ const InboxPage = () => {
       <ul className={classes["chat-list"]}>
         {conversations.map((conversation) => (
           <li
-            key={conversation.user.id}
+            key={conversation.lastMessage.id}
             className={classes["chat-item"]}
-            onClick={() => openChat(conversation.user.id)}
+            onClick={() => handleNavigation(conversation.user.id)}
           >
             <h2 className={classes["chat-user"]}>
               {conversation.user.firstName} {conversation.user.lastName}
@@ -47,7 +46,7 @@ const InboxPage = () => {
 
 export async function loader({ params }: LoaderFunctionArgs) {
   if (!params.id) {
-    throw new Error("User ID is required.");
+    throw new Error("User ID parameter is required.");
   }
   return queryClient.fetchQuery<Conversation[]>({
     queryKey: ["inbox", params.id],
