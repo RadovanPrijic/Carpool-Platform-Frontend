@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { getReviewById, updateReview } from "../../../services/review-service";
-import { LoaderFunctionArgs, useLoaderData, useParams } from "react-router";
+import { updateReview } from "../../../services/review-service";
+import { useLoaderData, useParams } from "react-router";
 import { Review, ReviewUpdateDTO } from "../types";
 import { useState } from "react";
 import { useAppSelector } from "../../../hooks/store-hooks";
@@ -53,17 +53,5 @@ const EditReviewPage = () => {
     />
   );
 };
-
-export async function loader({ params }: LoaderFunctionArgs) {
-  if (!params.id) {
-    throw new Error("Review ID parameter is required.");
-  }
-  const reviewId = params.id;
-
-  return queryClient.fetchQuery<Review>({
-    queryKey: ["review", reviewId],
-    queryFn: () => getReviewById(reviewId),
-  });
-}
 
 export default EditReviewPage;

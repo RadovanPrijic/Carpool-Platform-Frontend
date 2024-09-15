@@ -1,10 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { initiateEmailConfirmation } from "../../../services/auth-service";
-import { LoaderFunctionArgs, useLoaderData } from "react-router";
-import { queryClient } from "../../../utils/api-config";
+import { useLoaderData } from "react-router";
 import { User } from "../types";
-import { getUserById } from "../../../services/user-service";
 import Button from "../../../components/Button";
 
 const UserProfilePage = () => {
@@ -35,15 +33,5 @@ const UserProfilePage = () => {
     </>
   );
 };
-
-export async function loader({ params }: LoaderFunctionArgs) {
-  if (!params.id) {
-    throw new Error("User ID parameter is required.");
-  }
-  return queryClient.fetchQuery<User>({
-    queryKey: ["user", params.id],
-    queryFn: () => getUserById(params.id!),
-  });
-}
 
 export default UserProfilePage;

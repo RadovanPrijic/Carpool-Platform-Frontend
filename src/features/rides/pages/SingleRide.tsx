@@ -1,17 +1,9 @@
-import {
-  LoaderFunctionArgs,
-  useLoaderData,
-  useNavigate,
-  useParams,
-} from "react-router";
-import { deleteRide, getRideById } from "../../../services/ride-service";
+import { useLoaderData, useNavigate, useParams } from "react-router";
+import { deleteRide } from "../../../services/ride-service";
 import { useMutation } from "@tanstack/react-query";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { queryClient } from "../../../utils/api-config";
-import {
-  createBooking,
-  getAllBookingsForRide,
-} from "../../../services/booking-service";
+import { createBooking } from "../../../services/booking-service";
 import { useRef, useState } from "react";
 import Modal, { ModalHandle } from "../../../components/Modal";
 import { Ride } from "../types";
@@ -128,25 +120,5 @@ const SingleRidePage = () => {
     </div>
   );
 };
-
-export async function loader({ params }: LoaderFunctionArgs) {
-  if (!params.id) {
-    throw new Error("Ride ID parameter is required.");
-  }
-  const rideId = parseInt(params.id);
-
-  const [ride, bookings] = await Promise.all([
-    queryClient.fetchQuery<Ride>({
-      queryKey: ["ride", rideId],
-      queryFn: () => getRideById(rideId),
-    }),
-    queryClient.fetchQuery<Booking[]>({
-      queryKey: ["ride-bookings", rideId],
-      queryFn: () => getAllBookingsForRide(rideId),
-    }),
-  ]);
-
-  return { ride, bookings };
-}
 
 export default SingleRidePage;

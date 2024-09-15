@@ -29,15 +29,15 @@ import GivenReviewsPage from "./features/reviews/pages/GivenReviews";
 import ReceivedReviewsPage from "./features/reviews/pages/ReceivedReviews";
 import NewReviewPage from "./features/reviews/pages/NewReview";
 import EditReviewPage from "./features/reviews/pages/EditReview";
-import { loader as reviewLoader } from "./features/reviews/pages/EditReview";
+import { loader as reviewLoader } from "./features/reviews/loaders";
 import RootLayout from "./pages/RootLayout";
 import NotificationsPage from "./features/users/pages/Notifications";
 import InboxPage from "./features/messages/pages/Inbox";
 import ChatPage from "./features/messages/pages/Chat";
-import { loader as inboxLoader } from "./features/messages/pages/Inbox";
+import { loader as inboxLoader } from "./features/messages/loaders";
 import BookingsPage from "./features/bookings/pages/Bookings";
-import { loader as userLoader } from "./features/users/pages/UserProfile";
-import { loader as rideLoader } from "./features/rides/pages/SingleRide";
+import { loader as userLoader } from "./features/users/loaders";
+import { loader as rideLoader } from "./features/rides/loaders";
 
 function App() {
   const router = createBrowserRouter(

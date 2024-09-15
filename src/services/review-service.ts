@@ -44,7 +44,7 @@ export async function getReviewsForUser(
   }
 }
 
-export async function getReviewById(id: string): Promise<Review> {
+export async function getReviewById(id: number): Promise<Review> {
   try {
     const response = await fetch(`${API_ROUTES.REVIEWS}/${id}`, {
       method: "GET",

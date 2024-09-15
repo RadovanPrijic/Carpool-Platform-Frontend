@@ -14,7 +14,7 @@ const RideCard: React.FC<RideCardProps> = ({ ride }) => {
   };
 
   return (
-    <li key={ride.id}>
+    <li>
       {ride.id} | {ride.departureTime} | {ride.pricePerSeat} RSD{" "}
       <Button label="Go to ride" onClick={() => handleNavigation(ride.id)} />
     </li>

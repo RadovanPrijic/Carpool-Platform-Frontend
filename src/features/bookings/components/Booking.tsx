@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { Booking } from "../types";
-import { addHours } from "../../../utils/add-hours";
 import Modal, { ModalHandle } from "../../../components/Modal";
 import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
@@ -116,12 +115,12 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
         />
       )}
       {((filter === "by-user-accepted" &&
-        new Date(addHours(booking.ride.departureTime, 1)) > new Date()) ||
+        new Date(booking.ride.departureTime) > new Date()) ||
         filter === "by-user-requested") && (
         <Button label="Cancel" onClick={() => tryCancelBooking(booking.id)} />
       )}
       {filter === "by-user-accepted" &&
-        new Date(addHours(booking.ride.departureTime, 4)) < new Date() &&
+        new Date(booking.ride.departureTime) < new Date() &&
         booking.review === null && (
           <Button label="Review" onClick={() => handleNavigation(booking.id)} />
         )}

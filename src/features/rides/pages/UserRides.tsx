@@ -24,7 +24,7 @@ const UserRidesPage = () => {
     content = (
       <ul>
         {rides.map((ride) => (
-          <RideCard ride={ride} />
+          <RideCard key={ride.id} ride={ride} />
         ))}
       </ul>
     );
