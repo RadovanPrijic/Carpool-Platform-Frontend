@@ -2,7 +2,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { getFilteredRides } from "../../../services/ride-service";
 import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import RideSortAndFilter from "../components/RideSortAndFilter";
+import RidesSortAndFilter from "../components/RidesSortAndFilter";
 import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { ridesActions } from "../rides-slice";
 import { addHours } from "../../../utils/add-hours";
@@ -54,7 +54,7 @@ const FilteredRidesPage = () => {
   if (rides) {
     content = (
       <>
-        <RideSortAndFilter rides={rides} />
+        <RidesSortAndFilter rides={rides} />
         <ul className="events-list">
           {filteredRides!.map((ride) => (
             <li key={ride.id}>

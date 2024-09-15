@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { Location, RideCreateDTO } from "../types";
-import LocationDropdown from "../components/LocationDropdown";
+import LocationsDropdown from "../components/LocationsDropdown";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { createRide, getLocations } from "../../../services/ride-service";
 
@@ -66,12 +66,12 @@ const NewRidePage = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <LocationDropdown
+      <LocationsDropdown
         label="Starting Location"
         setSelectedLocation={setStartLocation}
         locations={locations!}
       />
-      <LocationDropdown
+      <LocationsDropdown
         label="End Location"
         setSelectedLocation={setEndLocation}
         locations={locations!}

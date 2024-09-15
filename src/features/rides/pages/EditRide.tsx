@@ -7,7 +7,7 @@ import {
   updateRide,
 } from "../../../services/ride-service";
 import { useParams } from "react-router";
-import LocationDropdown from "../components/LocationDropdown";
+import LocationsDropdown from "../components/LocationsDropdown";
 import { queryClient } from "../../../utils/api-config";
 import { useAppSelector } from "../../../hooks/store-hooks";
 
@@ -80,13 +80,13 @@ const EditRidePage = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <LocationDropdown
+      <LocationsDropdown
         label="Starting Location"
         setSelectedLocation={setStartLocation}
         locations={locations!}
         defaultValue={formData.startLocation}
       />
-      <LocationDropdown
+      <LocationsDropdown
         label="End Location"
         setSelectedLocation={setEndLocation}
         locations={locations!}

@@ -5,7 +5,7 @@ import { useLoaderData } from "react-router-dom";
 import { getTokenDuration, clearLocalStorage } from "../utils/auth";
 import { authActions } from "../features/authentication/auth-slice";
 import { userActions } from "../features/users/user-slice";
-import RideSearch from "../features/rides/components/RideSearch";
+import RidesSearch from "../features/rides/components/RidesSearch";
 
 const HomePage = () => {
   const token = useLoaderData();
@@ -79,7 +79,7 @@ const HomePage = () => {
           )}
         </p>
       </div>
-      <RideSearch />
+      <RidesSearch />
     </>
   );
 };

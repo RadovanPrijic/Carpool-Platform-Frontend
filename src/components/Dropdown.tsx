@@ -14,7 +14,6 @@ interface DropdownProps {
   value: string | number;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   placeholder?: string;
-
   disabled?: boolean;
   [key: string]: any;
 }

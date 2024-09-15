@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Ride } from "../types";
 import { useAppDispatch } from "../../../hooks/store-hooks";
 import { ridesActions } from "../rides-slice";
-
-interface SortingAndFilteringProps {
-  rides: Ride[];
-}
+import Input from "../../../components/Input";
+import Dropdown from "../../../components/Dropdown";
 
 const timeRanges = [
   { label: "Midnight to 6 AM", start: "00:00", end: "06:00" },
@@ -14,7 +12,6 @@ const timeRanges = [
   { label: "6:01 PM to Midnight", start: "18:01", end: "23:59" },
 ];
 
-// Helper function to check if a time is within a given range
 const isTimeInRange = (
   timeString: string,
   start: string,
@@ -24,32 +21,29 @@ const isTimeInRange = (
   const [startHours, startMinutes] = start.split(":").map(Number);
   const [endHours, endMinutes] = end.split(":").map(Number);
 
-  const time = timeHours * 60 + timeMinutes; // Convert to minutes
+  const time = timeHours * 60 + timeMinutes;
   const startTime = startHours * 60 + startMinutes;
   const endTime = endHours * 60 + endMinutes;
 
   return time >= startTime && time <= endTime;
 };
 
-const RideSortAndFilter: React.FC<SortingAndFilteringProps> = ({ rides }) => {
+interface RidesSortAndFilterProps {
+  rides: Ride[];
+}
+
+const RidesSortAndFilter: React.FC<RidesSortAndFilterProps> = ({ rides }) => {
   const [sortOption, setSortOption] = useState<string>("departureTime");
   const [departureTimeFilter, setDepartureTimeFilter] = useState<string[]>([]);
   const dispatch = useAppDispatch();
 
-  // Apply filters and sorting
-  useEffect(() => {
-    applyFiltersAndSort();
-  }, [sortOption, departureTimeFilter]);
-
-  const applyFiltersAndSort = () => {
+  const applyFiltersAndSort = useCallback(() => {
     let filteredRides = rides;
 
     if (departureTimeFilter.length > 0) {
       filteredRides = filteredRides.filter((ride) => {
-        const rideTime = new Date(ride.departureTime)
-          .toISOString()
-          .split("T")[1]
-          .slice(0, 5); // Get time part in HH:MM
+        const rideTime = ride.departureTime.split("T")[1].slice(0, 5);
+
         return departureTimeFilter.some((filter) =>
           timeRanges.some(
             (range) =>
@@ -60,21 +54,24 @@ const RideSortAndFilter: React.FC<SortingAndFilteringProps> = ({ rides }) => {
       });
     }
 
-    // Sort based on selected option
     const sortedRides = [...filteredRides].sort((a, b) => {
       if (sortOption === "pricePerSeat") {
-        return a.pricePerSeat - b.pricePerSeat; // Sort by price
+        return a.pricePerSeat - b.pricePerSeat;
       } else if (sortOption === "departureTime") {
         return (
           new Date(a.departureTime).getTime() -
           new Date(b.departureTime).getTime()
-        ); // Sort by departure time
+        );
       }
       return 0;
     });
 
     dispatch(ridesActions.setFilteredRides(sortedRides));
-  };
+  }, [rides, departureTimeFilter, sortOption, dispatch]);
+
+  useEffect(() => {
+    applyFiltersAndSort();
+  }, [sortOption, departureTimeFilter, applyFiltersAndSort]);
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortOption(e.target.value);
@@ -89,28 +86,34 @@ const RideSortAndFilter: React.FC<SortingAndFilteringProps> = ({ rides }) => {
 
   return (
     <div>
-      <div>
-        <label>Sort by: </label>
-        <select value={sortOption} onChange={handleSortChange}>
-          <option value="departureTime">Departure Time</option>
-          <option value="pricePerSeat">Price (Lowest First)</option>
-        </select>
-      </div>
-      <div>
-        {timeRanges.map((range) => (
-          <label key={range.label}>
-            <input
-              type="checkbox"
-              value={range.label}
-              onChange={() => handleDepartureTimeFilter(range.label)}
-              checked={departureTimeFilter.includes(range.label)}
-            />
-            {range.label}
-          </label>
-        ))}
-      </div>
+      <Dropdown
+        label="Sort by: "
+        id="sorting-choice"
+        name="sorting-choice"
+        value={sortOption}
+        onChange={handleSortChange}
+        options={[
+          { label: "Departure Time", value: "departureTime" },
+          {
+            label: "Price (lowest first)",
+            value: "pricePerSeat",
+          },
+        ]}
+      />
+      {timeRanges.map((range) => (
+        <Input
+          key={range.label}
+          label={range.label}
+          id="time-range"
+          name="time-range"
+          type="checkbox"
+          value={range.label}
+          onChange={() => handleDepartureTimeFilter(range.label)}
+          checked={departureTimeFilter.includes(range.label)}
+        />
+      ))}
     </div>
   );
 };
 
-export default RideSortAndFilter;
+export default RidesSortAndFilter;

@@ -22,6 +22,10 @@ export const ridesSlice = createSlice({
     setFilteredRides: (state, action: PayloadAction<Ride[]>) => {
       state.filteredRides = action.payload;
     },
+    clearAllRides: (state) => {
+      state.rides = undefined;
+      state.filteredRides = undefined;
+    },
   },
 });
 
