@@ -1,6 +1,11 @@
-import { useNavigate, useParams } from "react-router";
+import {
+  LoaderFunctionArgs,
+  useLoaderData,
+  useNavigate,
+  useParams,
+} from "react-router";
 import { deleteRide, getRideById } from "../../../services/ride-service";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { queryClient } from "../../../utils/api-config";
 import {
@@ -9,66 +14,49 @@ import {
 } from "../../../services/booking-service";
 import { useRef, useState } from "react";
 import Modal, { ModalHandle } from "../../../components/Modal";
+import { Ride } from "../types";
+import { Booking } from "../../bookings/types";
+import Button from "../../../components/Button";
+import Input from "../../../components/Input";
 
 const SingleRidePage = () => {
-  const params = useParams();
-  const navigate = useNavigate();
+  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
   const userId = useAppSelector((state) => state.auth.userId);
+  const { ride, bookings } = useLoaderData() as {
+    ride: Ride;
+    bookings: Booking[];
+  };
+  const isRideCreator: boolean = userId === ride.user.id;
   const [numberOfSeats, setNumberOfSeats] = useState<number>(1);
   const modalRef = useRef<ModalHandle>(null);
-  let isRideCreator: boolean = false;
+  const params = useParams();
+  const navigate = useNavigate();
 
-  const {
-    data: ride,
-    isSuccess,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["ride", params.id],
-    queryFn: () => getRideById(parseInt(params.id!)),
-  });
-
-  const { data: bookings, error: erorito } = useQuery({
-    queryKey: ["ride-bookings", params.id],
-    queryFn: () => getAllBookingsForRide(parseInt(params.id!)),
-  });
-
-  const { mutate } = useMutation({
+  const { mutate: tryDeleteRide } = useMutation({
     mutationFn: deleteRide,
-    onSuccess: async (response) => {
-      console.log(response);
-      queryClient.invalidateQueries({ queryKey: ["userRides", userId] });
-    },
-    onError: (error) => {
-      console.log(error.message);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user-rides", userId] });
+      navigate("/rides");
     },
   });
 
-  const { mutate: bookRide } = useMutation({
+  const { mutate: tryCreateBooking } = useMutation({
     mutationFn: createBooking,
-    onSuccess: async (response) => {
-      console.log(response);
-    },
-    onError: (error) => {
-      console.log(error.message);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ride-bookings", params.id] });
     },
   });
 
-  if (isSuccess && userId == ride.user.id) {
-    isRideCreator = true;
-  }
-
-  const handleNavigation = (action: string) => {
-    if (action === "edit") {
-      navigate(`/rides/edit/${params.id}`);
-    } else if (action === "review") {
-      navigate(`/rides/review/${params.id}`);
-    }
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNumberOfSeats(parseInt(event.target.value));
   };
 
-  const handleRideDeletion = () => {
-    mutate(parseInt(params.id!));
-    navigate("/rides");
+  const handleDeleteRide = () => {
+    tryDeleteRide(parseInt(params.id!));
+  };
+
+  const handleNavigation = () => {
+    navigate(`/rides/edit/${params.id}`);
   };
 
   const openModal = () => {
@@ -79,51 +67,38 @@ const SingleRidePage = () => {
     modalRef.current!.close();
   };
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNumberOfSeats(parseInt(event.target.value));
-  };
-
   const handleConfirm = (
     totalPrice: number,
     userId: string,
     rideId: number
   ) => {
-    bookRide({ seatsBooked: numberOfSeats, totalPrice, userId, rideId });
-    modalRef.current!.close();
+    tryCreateBooking({
+      seatsBooked: numberOfSeats,
+      totalPrice,
+      userId,
+      rideId,
+    });
+    closeModal();
   };
 
-  let content;
-
-  if (erorito) {
-    console.log(erorito.message);
-  }
-  if (isLoading) {
-    content = <p>Loading rides ...</p>;
-  }
-
-  if (error) {
-    content = <p>Error!</p>;
-  }
-
-  if (ride) {
-    content = (
-      <div>
-        <div>
-          {ride.id} {ride.pricePerSeat}
-        </div>
-        <br></br>
-        {isRideCreator && (
-          <div>
-            <b onClick={() => handleNavigation("edit")}>Edit ride |</b>
-            <b onClick={() => handleNavigation("review")}> Review ride |</b>
-            <b onClick={handleRideDeletion}> Delete ride</b>
-          </div>
-        )}
-        {ride.seatsAvailable >
-        bookings!.filter((booking) => booking.bookingStatus == "accepted")
-          .length ? (
+  return (
+    <div>
+      <header>
+        <h2>Ride {ride.id}</h2>
+      </header>
+      {isRideCreator && (
+        <>
+          <Button label="Edit ride" onClick={() => handleNavigation()} />
+          <Button label="Delete ride" onClick={handleDeleteRide} />
+        </>
+      )}
+      {isAuthenticated &&
+        !isRideCreator &&
+        ride.seatsAvailable >
+          bookings.filter((booking) => booking.bookingStatus == "accepted")
+            .length && (
           <>
-            <b onClick={openModal}>Book</b>
+            <Button label="Book ride" onClick={openModal} />
             <div>
               <Modal
                 title="Ride booking"
@@ -137,11 +112,11 @@ const SingleRidePage = () => {
                   )
                 }
               >
-                <label htmlFor="seats">Number of seats</label>
-                <input
-                  type="number"
+                <Input
+                  label="Number of seats"
                   id="seats"
                   name="seats"
+                  type="number"
                   value={numberOfSeats}
                   onChange={handleInputChange}
                   required
@@ -149,19 +124,29 @@ const SingleRidePage = () => {
               </Modal>
             </div>
           </>
-        ) : null}
-      </div>
-    );
-  }
-
-  return (
-    <section>
-      <header>
-        <h2>Rides</h2>
-      </header>
-      {content}
-    </section>
+        )}
+    </div>
   );
 };
+
+export async function loader({ params }: LoaderFunctionArgs) {
+  if (!params.id) {
+    throw new Error("Ride ID parameter is required.");
+  }
+  const rideId = parseInt(params.id);
+
+  const [ride, bookings] = await Promise.all([
+    queryClient.fetchQuery<Ride>({
+      queryKey: ["ride", rideId],
+      queryFn: () => getRideById(rideId),
+    }),
+    queryClient.fetchQuery<Booking[]>({
+      queryKey: ["ride-bookings", rideId],
+      queryFn: () => getAllBookingsForRide(rideId),
+    }),
+  ]);
+
+  return { ride, bookings };
+}
 
 export default SingleRidePage;

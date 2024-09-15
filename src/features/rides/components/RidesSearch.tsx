@@ -5,8 +5,8 @@ import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 
 const RidesSearch = () => {
-  const [startLocation, setStartLocation] = useState<string | null>(null);
-  const [endLocation, setEndLocation] = useState<string | null>(null);
+  const [startLocation, setStartLocation] = useState<string>("");
+  const [endLocation, setEndLocation] = useState<string>("");
   const [date, setDate] = useState<string>(
     new Date().toISOString().split("T")[0]
   );

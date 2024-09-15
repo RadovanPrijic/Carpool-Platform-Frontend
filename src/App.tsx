@@ -37,7 +37,7 @@ import ChatPage from "./features/messages/pages/Chat";
 import { loader as inboxLoader } from "./features/messages/pages/Inbox";
 import BookingsPage from "./features/bookings/pages/Bookings";
 import { loader as userLoader } from "./features/users/pages/UserProfile";
-import { loader as rideLoader } from "./features/reviews/pages/NewReview";
+import { loader as rideLoader } from "./features/rides/pages/SingleRide";
 
 function App() {
   const router = createBrowserRouter(
@@ -82,11 +82,19 @@ function App() {
 
           <Route path="rides">
             <Route path="filtered" element={<FilteredRidesPage />} />
-            <Route path=":id" element={<SingleRidePage />} />
+            <Route
+              path=":id"
+              element={<SingleRidePage />}
+              loader={rideLoader}
+            />
             <Route element={<ProtectedRoute />}>
               <Route index element={<UserRidesPage />} />
               <Route path="new" element={<NewRidePage />} />
-              <Route path="edit/:id" element={<EditRidePage />} />
+              <Route
+                path="edit/:id"
+                element={<EditRidePage />}
+                loader={rideLoader}
+              />
               <Route
                 path="review/:id"
                 element={<NewReviewPage />}

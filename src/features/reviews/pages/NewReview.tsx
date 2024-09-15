@@ -3,9 +3,7 @@ import { ReviewCreateDTO } from "../types";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import { createReview } from "../../../services/review-service";
 import { useState } from "react";
-import { LoaderFunctionArgs, useLoaderData } from "react-router";
-import { getRideById } from "../../../services/ride-service";
-import { getAllBookingsForRide } from "../../../services/booking-service";
+import { useLoaderData } from "react-router";
 import ReviewForm from "../components/ReviewForm";
 import { queryClient } from "../../../utils/api-config";
 import { Ride } from "../../rides/types";
@@ -17,7 +15,6 @@ const NewReviewPage = () => {
     bookings: Booking[];
   };
   const userId = useAppSelector((state) => state.auth.userId);
-
   const initialState: ReviewCreateDTO = {
     rating: 1,
     comment: "",
@@ -66,25 +63,5 @@ const NewReviewPage = () => {
     />
   );
 };
-
-export async function loader({ params }: LoaderFunctionArgs) {
-  if (!params.id) {
-    throw new Error("Ride ID parameter is required.");
-  }
-  const rideId = parseInt(params.id);
-
-  const [ride, bookings] = await Promise.all([
-    queryClient.fetchQuery<Ride>({
-      queryKey: ["ride", rideId],
-      queryFn: () => getRideById(rideId),
-    }),
-    queryClient.fetchQuery<Booking[]>({
-      queryKey: ["ride-bookings", rideId],
-      queryFn: () => getAllBookingsForRide(rideId),
-    }),
-  ]);
-
-  return { ride, bookings };
-}
 
 export default NewReviewPage;

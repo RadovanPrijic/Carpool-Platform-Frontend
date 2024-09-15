@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Location } from "../types";
 import { debounce } from "lodash";
 import { useQuery } from "@tanstack/react-query";
@@ -7,7 +7,7 @@ import Input from "../../../components/Input";
 
 interface LocationDropdownProps {
   label: string;
-  setSelectedLocation: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedLocation: React.Dispatch<React.SetStateAction<string>>;
   defaultValue?: string;
 }
 
@@ -18,6 +18,12 @@ const LocationsDropdown: React.FC<LocationDropdownProps> = ({
 }) => {
   const [filteredLocations, setFilteredLocations] = useState<Location[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>(defaultValue ?? "");
+
+  useEffect(() => {
+    if (defaultValue) {
+      setSelectedLocation(defaultValue);
+    }
+  }, [defaultValue, setSelectedLocation]);
 
   const {
     data: locations,
