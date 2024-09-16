@@ -30,7 +30,7 @@ const NewReviewPage = () => {
     onSuccess: () => {
       setFormData(initialState);
       queryClient.invalidateQueries({
-        queryKey: ["received-reviews", userId, false],
+        queryKey: ["received-reviews", ride.user.id, false],
       });
       queryClient.invalidateQueries({
         queryKey: ["given-reviews", userId, true],

@@ -1,9 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router";
-import { getReviewsForUser } from "../../../services/review-service";
+import {
+  deleteReview,
+  getReviewsForUser,
+} from "../../../services/review-service";
 import ReviewComponent from "../components/ReviewComponent";
+import { queryClient } from "../../../utils/api-config";
+import { useAppSelector } from "../../../hooks/store-hooks";
 
 const GivenReviewsPage = () => {
+  const userId = useAppSelector((state) => state.auth.userId);
   const params = useParams();
   const navigate = useNavigate();
 
@@ -15,6 +21,19 @@ const GivenReviewsPage = () => {
     queryKey: ["given-reviews", params.id!, true],
     queryFn: () => getReviewsForUser(params.id!, true),
   });
+
+  const { mutate: tryDeleteReview } = useMutation({
+    mutationFn: deleteReview,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["given-reviews", userId, true],
+      });
+    },
+  });
+
+  const handleDelete = (id: number) => {
+    tryDeleteReview(id);
+  };
 
   const handleNavigation = (id: number) => {
     navigate(`/reviews/edit/${id}`);
@@ -33,6 +52,7 @@ const GivenReviewsPage = () => {
             <ReviewComponent
               review={review}
               onEdit={() => handleNavigation(review.id)}
+              onDelete={handleDelete}
             />
           ))}
         </ul>

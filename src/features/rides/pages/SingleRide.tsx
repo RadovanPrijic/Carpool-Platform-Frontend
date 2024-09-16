@@ -20,7 +20,8 @@ const SingleRidePage = () => {
   };
   const isRideCreator: boolean = userId === ride.user.id;
   const [numberOfSeats, setNumberOfSeats] = useState<number>(1);
-  const modalRef = useRef<ModalHandle>(null);
+  const bookingmodalRef = useRef<ModalHandle>(null);
+  const deleteModalRef = useRef<ModalHandle>(null);
   const params = useParams();
   const navigate = useNavigate();
 
@@ -43,23 +44,16 @@ const SingleRidePage = () => {
     setNumberOfSeats(parseInt(event.target.value));
   };
 
-  const handleDeleteRide = () => {
-    tryDeleteRide(parseInt(params.id!));
-  };
-
   const handleNavigation = () => {
     navigate(`/rides/edit/${params.id}`);
   };
 
-  const openModal = () => {
-    modalRef.current!.open();
+  const handleConfirmDelete = () => {
+    tryDeleteRide(parseInt(params.id!));
+    deleteModalRef.current!.close();
   };
 
-  const closeModal = () => {
-    modalRef.current!.close();
-  };
-
-  const handleConfirm = (
+  const handleConfirmBooking = (
     totalPrice: number,
     userId: string,
     rideId: number
@@ -70,7 +64,7 @@ const SingleRidePage = () => {
       userId,
       rideId,
     });
-    closeModal();
+    bookingmodalRef.current!.close();
   };
 
   return (
@@ -81,7 +75,20 @@ const SingleRidePage = () => {
       {isRideCreator && (
         <>
           <Button label="Edit ride" onClick={() => handleNavigation()} />
-          <Button label="Delete ride" onClick={handleDeleteRide} />
+          <Button
+            label="Delete ride"
+            onClick={() => deleteModalRef.current!.open()}
+          />
+          <div>
+            <Modal
+              title="Review deletion"
+              ref={deleteModalRef}
+              onCancel={() => deleteModalRef.current!.close()}
+              onConfirm={handleConfirmDelete}
+            >
+              <p>Are you sure you want to delete this review?</p>
+            </Modal>
+          </div>
         </>
       )}
       {isAuthenticated &&
@@ -90,14 +97,17 @@ const SingleRidePage = () => {
           bookings.filter((booking) => booking.bookingStatus == "accepted")
             .length && (
           <>
-            <Button label="Book ride" onClick={openModal} />
+            <Button
+              label="Book ride"
+              onClick={() => bookingmodalRef.current!.open()}
+            />
             <div>
               <Modal
                 title="Ride booking"
-                ref={modalRef}
-                onCancel={closeModal}
+                ref={bookingmodalRef}
+                onCancel={() => bookingmodalRef.current!.close()}
                 onConfirm={() =>
-                  handleConfirm(
+                  handleConfirmBooking(
                     ride.pricePerSeat * numberOfSeats,
                     userId,
                     ride.id
