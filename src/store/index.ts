@@ -2,6 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/authentication/auth-slice";
 import userReducer from "../features/users/user-slice";
 import ridesReducer from "../features/rides/rides-slice";
+import errorReducer from "./error-slice";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   auth: authReducer,
   user: userReducer,
   rides: ridesReducer,
+  error: errorReducer,
 });
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

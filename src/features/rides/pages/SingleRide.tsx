@@ -1,7 +1,7 @@
 import { useLoaderData, useNavigate, useParams } from "react-router";
 import { deleteRide } from "../../../services/ride-service";
 import { useMutation } from "@tanstack/react-query";
-import { useAppSelector } from "../../../hooks/store-hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { queryClient } from "../../../utils/api-config";
 import { createBooking } from "../../../services/booking-service";
 import { useRef, useState } from "react";
@@ -10,6 +10,7 @@ import { Ride } from "../types";
 import { Booking } from "../../bookings/types";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
+import { errorActions } from "../../../store/error-slice";
 
 const SingleRidePage = () => {
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
@@ -24,12 +25,17 @@ const SingleRidePage = () => {
   const deleteModalRef = useRef<ModalHandle>(null);
   const params = useParams();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const { mutate: tryDeleteRide } = useMutation({
     mutationFn: deleteRide,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["user-rides", userId] });
       navigate("/rides");
+    },
+    onError: (error) => {
+      console.log("HEFE!");
+      dispatch(errorActions.setError(error.message));
     },
   });
 
