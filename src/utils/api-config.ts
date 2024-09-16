@@ -11,7 +11,3 @@ export const API_ROUTES = {
 };
 
 export const queryClient = new QueryClient();
-
-export interface ErrorResponse {
-  message: string;
-}
