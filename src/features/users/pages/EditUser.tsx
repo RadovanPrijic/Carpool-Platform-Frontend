@@ -10,10 +10,15 @@ const EditUserPage = () => {
   const currentUser = useAppSelector((state) => state.user.currentUser!);
   const {
     id,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     email,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     rating,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     createdAt,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     picture,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     notifications,
     ...initialState
   } = currentUser;

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate, useNavigation } from "react-router";
 import { useAppDispatch } from "../../../hooks/store-hooks.ts";
 import { login } from "../../../services/auth-service.ts";
 import { useMutation } from "@tanstack/react-query";
@@ -19,6 +19,7 @@ const LoginPage = () => {
   });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const navigation = useNavigation();
 
   const { mutate: tryLogin } = useMutation({
     mutationFn: login,
@@ -73,7 +74,11 @@ const LoginPage = () => {
         placeholder="Enter your password ..."
         required
       />
-      <Button label="Log in" type="submit" />
+      <Button
+        type="submit"
+        label={navigation.state === "submitting" ? "Logging in ..." : "Log in"}
+        disabled={navigation.state === "submitting"}
+      />
     </form>
   );
 };

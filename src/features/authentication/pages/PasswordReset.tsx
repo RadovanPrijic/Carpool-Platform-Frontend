@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigation, useSearchParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { resetPassword } from "../../../services/auth-service";
 import { useState } from "react";
@@ -17,6 +17,7 @@ const PasswordResetPage = () => {
   const [searchParams] = useSearchParams();
   const email = searchParams.get("userEmail");
   const resetToken = searchParams.get("resetToken");
+  const navigation = useNavigation();
 
   const { mutate: tryResetPassword } = useMutation({
     mutationFn: resetPassword,
@@ -76,7 +77,15 @@ const PasswordResetPage = () => {
         placeholder="Repeat your new password ..."
         required
       />
-      <Button label="Change password" type="submit" />
+      <Button
+        type="submit"
+        label={
+          navigation.state === "submitting"
+            ? "Submitting ..."
+            : "Change password"
+        }
+        disabled={navigation.state === "submitting"}
+      />
     </form>
   );
 };

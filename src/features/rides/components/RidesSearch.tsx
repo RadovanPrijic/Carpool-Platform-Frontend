@@ -1,6 +1,6 @@
 import { useState } from "react";
 import LocationsDropdown from "./LocationsDropdown";
-import { useNavigate } from "react-router";
+import { useNavigate, useNavigation } from "react-router";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 
@@ -12,6 +12,7 @@ const RidesSearch = () => {
   );
   const [seats, setSeats] = useState<number>(1);
   const navigate = useNavigate();
+  const navigation = useNavigation();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -51,7 +52,11 @@ const RidesSearch = () => {
         onChange={(e) => setSeats(parseInt(e.target.value))}
         required
       />
-      <Button label="Submit" type="submit" />
+      <Button
+        type="submit"
+        label={navigation.state === "submitting" ? "Submitting ..." : "Search"}
+        disabled={navigation.state === "submitting"}
+      />
     </form>
   );
 };

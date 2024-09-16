@@ -5,6 +5,7 @@ import { useAppSelector } from "../../../hooks/store-hooks";
 import { useState } from "react";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
+import { useNavigation } from "react-router";
 
 const initialFormData: EmailDTO = {
   email: "",
@@ -15,6 +16,7 @@ const initialFormData: EmailDTO = {
 const EmailChangePage = () => {
   const [formData, setFormData] = useState<EmailDTO>(initialFormData);
   const userId = useAppSelector((state) => state.auth.userId);
+  const navigation = useNavigation();
 
   const { mutate: tryInitiateEmailChange } = useMutation({
     mutationFn: initiateEmailChange,
@@ -70,7 +72,13 @@ const EmailChangePage = () => {
         placeholder="Repeat your new email address ..."
         required
       />
-      <Button label="Send change link" type="submit" />
+      <Button
+        type="submit"
+        label={
+          navigation.state === "submitting" ? "Sending ..." : "Send change link"
+        }
+        disabled={navigation.state === "submitting"}
+      />
     </form>
   );
 };

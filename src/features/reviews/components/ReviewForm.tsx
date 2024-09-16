@@ -1,7 +1,8 @@
 import { ChangeEvent } from "react";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
-import Textarea from "../../../components/TextArea";
+import Textarea from "../../../components/Textarea";
+import { useNavigation } from "react-router";
 
 interface ReviewFormProps {
   rating: number;
@@ -20,6 +21,8 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   onSubmit,
   onChange,
 }) => {
+  const navigation = useNavigation();
+
   return (
     <form onSubmit={onSubmit}>
       <Input
@@ -44,8 +47,15 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         placeholder="Enter your comment ..."
       />
       <Button
-        label={type === "create" ? "Post review" : "Edit review"}
         type="submit"
+        label={
+          navigation.state === "submitting"
+            ? "Submitting ..."
+            : type === "create"
+            ? "Post review"
+            : "Edit review"
+        }
+        disabled={navigation.state === "submitting"}
       />
     </form>
   );

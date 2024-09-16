@@ -8,6 +8,7 @@ import {
 } from "../../../services/user-service";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
+import { useNavigation } from "react-router";
 
 const ProfilePicturePage = () => {
   const userId = useAppSelector((state) => state.auth.userId);
@@ -17,6 +18,7 @@ const ProfilePicturePage = () => {
   const [profilePictureInput, setProfilePictureInput] =
     useState<HTMLInputElement | null>(null);
   const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
   const { mutate: tryUploadProfilePicture } = useMutation({
     mutationFn: uploadProfilePicture,
@@ -63,7 +65,15 @@ const ProfilePicturePage = () => {
           onChange={handleInputChange}
           required
         />
-        <Button label="Upload picture" type="submit" />
+        <Button
+          type="submit"
+          label={
+            navigation.state === "submitting"
+              ? "Uploading ..."
+              : "Upload picture"
+          }
+          disabled={navigation.state === "submitting"}
+        />
       </form>
       {userProfilePicture && (
         <div>

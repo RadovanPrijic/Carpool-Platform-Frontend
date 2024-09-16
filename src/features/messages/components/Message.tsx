@@ -7,7 +7,7 @@ import { queryClient } from "../../../utils/api-config";
 import { useAppSelector } from "../../../hooks/store-hooks";
 import Modal, { ModalHandle } from "../../../components/Modal";
 import Button from "../../../components/Button";
-import Textarea from "../../../components/TextArea";
+import Textarea from "../../../components/Textarea";
 
 interface MessageComponentProps {
   message: Message;

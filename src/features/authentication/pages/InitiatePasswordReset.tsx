@@ -3,9 +3,11 @@ import { initiatePasswordReset } from "../../../services/auth-service";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import { useState } from "react";
+import { useNavigation } from "react-router";
 
 const InitiatePasswordResetPage = () => {
   const [emailInput, setEmailInput] = useState<string>("");
+  const navigation = useNavigation();
 
   const { mutate: tryInitiatePasswordReset } = useMutation({
     mutationFn: initiatePasswordReset,
@@ -35,7 +37,13 @@ const InitiatePasswordResetPage = () => {
         placeholder="Enter your email address ..."
         required
       />
-      <Button label="Send reset link" type="submit" />
+      <Button
+        type="submit"
+        label={
+          navigation.state === "submitting" ? "Sending ..." : "Send reset link"
+        }
+        disabled={navigation.state === "submitting"}
+      />
     </form>
   );
 };

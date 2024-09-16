@@ -1,9 +1,10 @@
 import { ChangeEvent } from "react";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
-import Textarea from "../../../components/TextArea";
+import Textarea from "../../../components/Textarea";
 import LocationsDropdown from "./LocationsDropdown";
 import Dropdown from "../../../components/Dropdown";
+import { useNavigation } from "react-router";
 
 interface RideFormProps {
   startLocation?: string;
@@ -46,6 +47,8 @@ const RideForm: React.FC<RideFormProps> = ({
   onChange,
   formType,
 }) => {
+  const navigation = useNavigation();
+
   return (
     <form onSubmit={onSubmit}>
       <LocationsDropdown
@@ -151,7 +154,15 @@ const RideForm: React.FC<RideFormProps> = ({
         checked={automaticBooking}
         onChange={onChange}
       />
-      <Button label={`${formType} ride`} type="submit" />
+      <Button
+        type="submit"
+        label={
+          navigation.state === "submitting"
+            ? "Submitting ..."
+            : `${formType} ride`
+        }
+        disabled={navigation.state === "submitting"}
+      />
     </form>
   );
 };

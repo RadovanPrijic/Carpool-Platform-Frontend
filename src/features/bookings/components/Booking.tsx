@@ -11,7 +11,7 @@ import {
   updateBooking,
 } from "../../../services/booking-service";
 import Button from "../../../components/Button";
-import Textarea from "../../../components/TextArea";
+import Textarea from "../../../components/Textarea";
 
 interface BookingComponentProps {
   booking: Booking;

@@ -2,7 +2,8 @@ import { ChangeEvent } from "react";
 import Button from "../../../components/Button";
 import Dropdown from "../../../components/Dropdown";
 import Input from "../../../components/Input";
-import Textarea from "../../../components/TextArea";
+import Textarea from "../../../components/Textarea";
+import { useNavigation } from "react-router";
 
 interface UserFormProps {
   email?: string;
@@ -39,6 +40,8 @@ const UserForm: React.FC<UserFormProps> = ({
   onSubmit,
   onChange,
 }) => {
+  const navigation = useNavigation();
+
   return (
     <form onSubmit={onSubmit}>
       {email !== undefined && (
@@ -188,8 +191,15 @@ const UserForm: React.FC<UserFormProps> = ({
         ]}
       />
       <Button
-        label={email !== undefined ? "Register" : "Edit user"}
         type="submit"
+        label={
+          navigation.state === "submitting"
+            ? "Submitting..."
+            : email !== undefined
+            ? "Register"
+            : "Edit user"
+        }
+        disabled={navigation.state === "submitting"}
       />
     </form>
   );
