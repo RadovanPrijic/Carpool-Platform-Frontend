@@ -8,7 +8,7 @@ function isErrorResponse(response: any): response is ErrorResponse {
 }
 
 // ASP.NET Validation Error object
-interface ValidationErrorResponse {
+export interface ValidationErrorResponse {
   errors: {
     [key: string]: string[];
   };
@@ -22,10 +22,20 @@ function isValidationErrorResponse(data: any): data is ValidationErrorResponse {
   return data && data.errors && typeof data.errors === "object";
 }
 
-class ValidationError extends Error {
-  validationErrors: { [key: string]: string[] };
+// export class ValidationError extends Error {
+//   validationErrors: { [key: string]: string[] };
 
-  constructor(message: string, validationErrors: { [key: string]: string[] }) {
+//   constructor(message: string, validationErrors: { [key: string]: string[] }) {
+//     super(message);
+//     this.validationErrors = validationErrors;
+//   }
+// }
+
+// Custom ValidationError class for better error handling
+export class ValidationError extends Error {
+  validationErrors: ValidationErrorResponse;
+
+  constructor(message: string, validationErrors: ValidationErrorResponse) {
     super(message);
     this.validationErrors = validationErrors;
   }
@@ -53,7 +63,7 @@ export async function httpRequest<T>(
         }
 
         if (isValidationErrorResponse(errorData)) {
-          throw new ValidationError("Validation failure.", errorData.errors);
+          throw new ValidationError("Validation failure.", errorData);
         }
       }
     }
@@ -62,7 +72,7 @@ export async function httpRequest<T>(
     return result;
   } catch (error) {
     if (error instanceof ValidationError) {
-      console.log("Caught validation error(s):", error.validationErrors);
+      console.log("Caught validation error(s):", error.validationErrors.errors);
       throw error;
     }
 

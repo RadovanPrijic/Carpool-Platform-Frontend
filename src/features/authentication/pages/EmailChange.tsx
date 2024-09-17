@@ -1,11 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { EmailDTO } from "../types";
 import { initiateEmailChange } from "../../../services/auth-service";
-import { useAppSelector } from "../../../hooks/store-hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { useState } from "react";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import { useNavigation } from "react-router";
+import { ValidationError, ValidationErrorResponse } from "../../../utils/http";
+import { errorActions } from "../../../store/error-slice";
 
 const initialFormData: EmailDTO = {
   email: "",
@@ -15,13 +17,25 @@ const initialFormData: EmailDTO = {
 
 const EmailChangePage = () => {
   const [formData, setFormData] = useState<EmailDTO>(initialFormData);
+  const [validation, setValidation] = useState<ValidationErrorResponse | null>(
+    null
+  );
   const userId = useAppSelector((state) => state.auth.userId);
+  const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
   const { mutate: tryInitiateEmailChange } = useMutation({
     mutationFn: initiateEmailChange,
     onSuccess: () => {
       setFormData(initialFormData);
+      setValidation(null);
+    },
+    onError: (error) => {
+      if (error instanceof ValidationError) {
+        setValidation(error.validationErrors);
+      } else {
+        dispatch(errorActions.setError(error.message));
+      }
     },
   });
 
@@ -51,7 +65,9 @@ const EmailChangePage = () => {
         onChange={handleInputChange}
         placeholder="Enter your current email address ..."
         required
+        validationErrorMessage={validation?.errors.Email[0]}
       />
+
       <Input
         label="New email address"
         id="new-email"
@@ -61,6 +77,7 @@ const EmailChangePage = () => {
         onChange={handleInputChange}
         placeholder="Enter your new email address ..."
         required
+        validationErrorMessage={validation?.errors.NewEmail[0]}
       />
       <Input
         label="New email address confirmation"
@@ -71,6 +88,7 @@ const EmailChangePage = () => {
         onChange={handleInputChange}
         placeholder="Repeat your new email address ..."
         required
+        validationErrorMessage={validation?.errors.NewEmailConfirmation[0]}
       />
       <Button
         type="submit"

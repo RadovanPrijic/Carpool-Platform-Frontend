@@ -11,6 +11,8 @@ interface TextareaProps {
   rows?: number;
   cols?: number;
   disabled?: boolean;
+  validationErrorMessage?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -25,6 +27,7 @@ const Textarea: React.FC<TextareaProps> = ({
   rows = 10,
   cols = 30,
   disabled = false,
+  validationErrorMessage,
   ...rest
 }) => {
   return (
@@ -43,6 +46,7 @@ const Textarea: React.FC<TextareaProps> = ({
         className="textarea-field"
         {...rest}
       />
+      {validationErrorMessage && <p>{validationErrorMessage}</p>}
     </div>
   );
 };

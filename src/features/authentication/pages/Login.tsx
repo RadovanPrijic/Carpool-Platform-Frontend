@@ -11,12 +11,20 @@ import { jwtDecode } from "jwt-decode";
 import { MyJwtPayload } from "../../../utils/auth.ts";
 import Input from "../../../components/Input.tsx";
 import Button from "../../../components/Button.tsx";
+import { errorActions } from "../../../store/error-slice.ts";
+import {
+  ValidationError,
+  ValidationErrorResponse,
+} from "../../../utils/http.ts";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<LoginRequestDTO>({
     email: "",
     password: "",
   });
+  const [validation, setValidation] = useState<ValidationErrorResponse | null>(
+    null
+  );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const navigation = useNavigation();
@@ -36,6 +44,13 @@ const LoginPage = () => {
       const userData = await getUserById(decoded.nameid);
       dispatch(userActions.setCurrentUser(userData));
       navigate("/");
+    },
+    onError: (error) => {
+      if (error instanceof ValidationError) {
+        setValidation(error.validationErrors);
+      } else {
+        dispatch(errorActions.setError(error.message));
+      }
     },
   });
 
@@ -63,6 +78,7 @@ const LoginPage = () => {
         onChange={handleInputChange}
         placeholder="Enter your email address ..."
         required
+        validationErrorMessage={validation?.errors.Email[0]}
       />
       <Input
         label="Password"
@@ -73,6 +89,7 @@ const LoginPage = () => {
         onChange={handleInputChange}
         placeholder="Enter your password ..."
         required
+        validationErrorMessage={validation?.errors.Password[0]}
       />
       <Button
         type="submit"

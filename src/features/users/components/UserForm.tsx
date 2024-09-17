@@ -4,6 +4,7 @@ import Dropdown from "../../../components/Dropdown";
 import Input from "../../../components/Input";
 import Textarea from "../../../components/Textarea";
 import { useNavigation } from "react-router";
+import { ValidationErrorResponse } from "../../../utils/http";
 
 interface UserFormProps {
   email?: string;
@@ -23,6 +24,7 @@ interface UserFormProps {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => void;
+  validation?: ValidationErrorResponse | null;
 }
 
 const UserForm: React.FC<UserFormProps> = ({
@@ -39,6 +41,7 @@ const UserForm: React.FC<UserFormProps> = ({
   petsPrefs,
   onSubmit,
   onChange,
+  validation,
 }) => {
   const navigation = useNavigation();
 
@@ -54,6 +57,7 @@ const UserForm: React.FC<UserFormProps> = ({
           onChange={onChange}
           placeholder="Enter your email address ..."
           required
+          validationErrorMessage={validation?.errors.Email[0]}
         />
       )}
       {password !== undefined && (
@@ -66,6 +70,7 @@ const UserForm: React.FC<UserFormProps> = ({
           onChange={onChange}
           placeholder="Enter your password ..."
           required
+          validationErrorMessage={validation?.errors.Password[0]}
         />
       )}
       <Input
@@ -77,6 +82,7 @@ const UserForm: React.FC<UserFormProps> = ({
         onChange={onChange}
         placeholder="Enter your first name ..."
         required
+        validationErrorMessage={validation?.errors.FirstName[0]}
       />
       <Input
         label="Last name"
@@ -87,6 +93,7 @@ const UserForm: React.FC<UserFormProps> = ({
         onChange={onChange}
         placeholder="Enter your last name ..."
         required
+        validationErrorMessage={validation?.errors.LastName[0]}
       />
       <Input
         label="Phone number"
@@ -97,6 +104,7 @@ const UserForm: React.FC<UserFormProps> = ({
         onChange={onChange}
         placeholder="Enter your phone number ..."
         required
+        validationErrorMessage={validation?.errors.PhoneNumber[0]}
       />
       <Input
         label="Birth date"
@@ -106,6 +114,7 @@ const UserForm: React.FC<UserFormProps> = ({
         value={birthDate.split("T")[0]}
         onChange={onChange}
         required
+        validationErrorMessage={validation?.errors.BirthDate[0]}
       />
       <Textarea
         label="Profile biography (optional)"
@@ -114,6 +123,7 @@ const UserForm: React.FC<UserFormProps> = ({
         value={profileBio ?? ""}
         onChange={onChange}
         placeholder="Tell us something about yourself ..."
+        validationErrorMessage={validation?.errors.ProfileBio[0]}
       />
       <Dropdown
         label="Chattiness preferences (optional)"

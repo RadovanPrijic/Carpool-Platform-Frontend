@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useAppDispatch } from "../../../hooks/store-hooks";
 import { authActions } from "../auth-slice";
 import { userActions } from "../../users/user-slice";
+import { errorActions } from "../../../store/error-slice";
 
 const EmailConfirmationPage = () => {
   const [searchParams] = useSearchParams();
@@ -26,6 +27,9 @@ const EmailConfirmationPage = () => {
       } else {
         dispatch(userActions.changeUserEmail(newEmail!));
       }
+    },
+    onError: (error) => {
+      dispatch(errorActions.setError(error.message));
     },
   });
 

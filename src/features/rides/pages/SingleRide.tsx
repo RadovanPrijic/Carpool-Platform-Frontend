@@ -34,7 +34,6 @@ const SingleRidePage = () => {
       navigate("/rides");
     },
     onError: (error) => {
-      console.log("HEFE!");
       dispatch(errorActions.setError(error.message));
     },
   });

@@ -4,15 +4,21 @@ import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import { useState } from "react";
 import { useNavigation } from "react-router";
+import { useAppDispatch } from "../../../hooks/store-hooks";
+import { errorActions } from "../../../store/error-slice";
 
 const InitiatePasswordResetPage = () => {
   const [emailInput, setEmailInput] = useState<string>("");
+  const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
   const { mutate: tryInitiatePasswordReset } = useMutation({
     mutationFn: initiatePasswordReset,
     onSuccess: () => {
       setEmailInput("");
+    },
+    onError: (error) => {
+      dispatch(errorActions.setError(error.message));
     },
   });
 

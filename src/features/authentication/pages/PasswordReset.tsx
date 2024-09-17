@@ -5,6 +5,9 @@ import { useState } from "react";
 import { PasswordDTO } from "../types";
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
+import { ValidationError, ValidationErrorResponse } from "../../../utils/http";
+import { useAppDispatch } from "../../../hooks/store-hooks";
+import { errorActions } from "../../../store/error-slice";
 
 const initialFormData: PasswordDTO = {
   password: "",
@@ -14,15 +17,26 @@ const initialFormData: PasswordDTO = {
 
 const PasswordResetPage = () => {
   const [formData, setFormData] = useState<PasswordDTO>(initialFormData);
+  const [validation, setValidation] = useState<ValidationErrorResponse | null>(
+    null
+  );
   const [searchParams] = useSearchParams();
   const email = searchParams.get("userEmail");
   const resetToken = searchParams.get("resetToken");
+  const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
   const { mutate: tryResetPassword } = useMutation({
     mutationFn: resetPassword,
     onSuccess: () => {
       setFormData(initialFormData);
+    },
+    onError: (error) => {
+      if (error instanceof ValidationError) {
+        setValidation(error.validationErrors);
+      } else {
+        dispatch(errorActions.setError(error.message));
+      }
     },
   });
 
@@ -56,6 +70,7 @@ const PasswordResetPage = () => {
         onChange={handleInputChange}
         placeholder="Enter your current password ..."
         required
+        validationErrorMessage={validation?.errors.Password[0]}
       />
       <Input
         label="New password"
@@ -66,6 +81,7 @@ const PasswordResetPage = () => {
         onChange={handleInputChange}
         placeholder="Enter your new password ..."
         required
+        validationErrorMessage={validation?.errors.NewPassword[0]}
       />
       <Input
         label="New password confirmation"
@@ -76,6 +92,7 @@ const PasswordResetPage = () => {
         onChange={handleInputChange}
         placeholder="Repeat your new password ..."
         required
+        validationErrorMessage={validation?.errors.NewPasswordConfirmation[0]}
       />
       <Button
         type="submit"

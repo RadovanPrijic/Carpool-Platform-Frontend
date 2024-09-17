@@ -5,10 +5,12 @@ interface InputProps {
   id: string;
   name?: string;
   type: string;
-  value: string | number | boolean;
+  value: string | number;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   required?: boolean;
+  validationErrorMessage?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -21,6 +23,7 @@ const Input: React.FC<InputProps> = ({
   onChange,
   placeholder,
   required = false,
+  validationErrorMessage,
   ...rest
 }) => {
   return (
@@ -37,6 +40,7 @@ const Input: React.FC<InputProps> = ({
         className="input-field"
         {...rest}
       />
+      {validationErrorMessage && <p>{validationErrorMessage}</p>}
     </div>
   );
 };
