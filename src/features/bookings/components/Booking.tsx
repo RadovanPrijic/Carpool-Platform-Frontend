@@ -29,7 +29,7 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
   const [validation, setValidation] = useState<ValidationErrorResponse | null>(
     null
   );
-  const modalRef = useRef<ModalHandle>(null);
+  const messageModalRef = useRef<ModalHandle>(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -76,14 +76,6 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
     },
   });
 
-  const openModal = () => {
-    modalRef.current!.open();
-  };
-
-  const closeModal = () => {
-    modalRef.current!.close();
-  };
-
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessageContent(event.target.value);
   };
@@ -91,7 +83,7 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
   const handleConfirm = (senderId: string, receiverId: string) => {
     trySendMessage({ content: messageContent, senderId, receiverId });
     if (!validation) {
-      closeModal();
+      messageModalRef.current!.close();
     }
   };
 
@@ -100,7 +92,7 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
   };
 
   return (
-    <li key={booking.id}>
+    <li>
       {booking.id}: {booking.bookingStatus} {booking.ride.id}
       {filter === "for-user-requested" && (
         <>
@@ -145,37 +137,33 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
         booking.review === null && (
           <Button label="Review" onClick={() => handleNavigation(booking.id)} />
         )}
-      <b onClick={openModal}> | Message</b>
-      <div>
-        <Modal
-          title={`Message ${
-            filter.includes("by-user")
-              ? booking.ride.user.firstName + " " + booking.ride.user.lastName
-              : booking.user.firstName + " " + booking.user.lastName
-          }`}
-          ref={modalRef}
-          onCancel={closeModal}
-          onConfirm={() =>
-            handleConfirm(
-              userId,
-              filter.includes("by-user")
-                ? booking.ride.user.id
-                : booking.user.id
-            )
-          }
-        >
-          <Textarea
-            label="Your message"
-            id="message"
-            name="message"
-            value={messageContent}
-            onChange={handleInputChange}
-            placeholder="Enter your message ..."
-            required
-            validationErrorMessage={validation?.errors.Content[0]}
-          />
-        </Modal>
-      </div>
+      <Button label="Message" onClick={() => messageModalRef.current!.open()} />
+      <Modal
+        title={`Message ${
+          filter.includes("by-user")
+            ? booking.ride.user.firstName + " " + booking.ride.user.lastName
+            : booking.user.firstName + " " + booking.user.lastName
+        }`}
+        ref={messageModalRef}
+        onCancel={() => messageModalRef.current!.close()}
+        onConfirm={() =>
+          handleConfirm(
+            userId,
+            filter.includes("by-user") ? booking.ride.user.id : booking.user.id
+          )
+        }
+      >
+        <Textarea
+          label="Your message"
+          id="message"
+          name="message"
+          value={messageContent}
+          onChange={handleInputChange}
+          placeholder="Enter your message ..."
+          required
+          validationErrorMessage={validation?.errors.Content[0]}
+        />
+      </Modal>
     </li>
   );
 };

@@ -32,7 +32,11 @@ const BookingsPage = () => {
     content = (
       <ul>
         {bookings.map((booking: Booking) => (
-          <BookingComponent booking={booking} filter={filter} />
+          <BookingComponent
+            key={booking.id}
+            booking={booking}
+            filter={filter}
+          />
         ))}
       </ul>
     );

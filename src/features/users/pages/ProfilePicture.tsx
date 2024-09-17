@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { useMutation } from "@tanstack/react-query";
 import { userActions } from "../user-slice";
@@ -10,6 +10,7 @@ import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import { useNavigation } from "react-router";
 import { errorActions } from "../../../store/error-slice";
+import Modal, { ModalHandle } from "../../../components/Modal";
 
 const ProfilePicturePage = () => {
   const userId = useAppSelector((state) => state.auth.userId);
@@ -18,6 +19,7 @@ const ProfilePicturePage = () => {
   );
   const [profilePictureInput, setProfilePictureInput] =
     useState<HTMLInputElement | null>(null);
+  const deleteModalRef = useRef<ModalHandle>(null);
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
 
@@ -53,8 +55,9 @@ const ProfilePicturePage = () => {
     tryUploadProfilePicture({ file: formData, userId });
   };
 
-  const handleDeleteProfilePicture = () => {
+  const handleConfirmDelete = () => {
     tryDeleteProfilePicture(userProfilePicture!.id);
+    deleteModalRef.current!.close();
   };
 
   return (
@@ -81,7 +84,18 @@ const ProfilePicturePage = () => {
       </form>
       {userProfilePicture && (
         <div>
-          <Button label="Delete picture" onClick={handleDeleteProfilePicture} />
+          <Button
+            label="Delete picture"
+            onClick={() => deleteModalRef.current!.open()}
+          />
+          <Modal
+            title="Profile picture removal"
+            ref={deleteModalRef}
+            onCancel={() => deleteModalRef.current!.close()}
+            onConfirm={handleConfirmDelete}
+          >
+            <p>Are you sure you want to remove your profile picture?</p>
+          </Modal>
         </div>
       )}
       {userProfilePicture && (
