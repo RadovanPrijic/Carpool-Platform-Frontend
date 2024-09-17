@@ -93,7 +93,11 @@ const ChatPage = () => {
       <div className={classes["chat-container"]}>
         <div className={classes["chat-history"]}>
           {conversationMessages.map((message) => (
-            <MessageComponent message={message} receiverId={params.id!} />
+            <MessageComponent
+              key={message.id}
+              message={message}
+              receiverId={params.id!}
+            />
           ))}
           <div ref={chatEndRef}></div>{" "}
         </div>

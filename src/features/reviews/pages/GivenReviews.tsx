@@ -55,6 +55,7 @@ const GivenReviewsPage = () => {
         <ul>
           {givenReviews.map((review) => (
             <ReviewComponent
+              key={review.id}
               review={review}
               onEdit={() => handleNavigation(review.id)}
               onDelete={handleDelete}

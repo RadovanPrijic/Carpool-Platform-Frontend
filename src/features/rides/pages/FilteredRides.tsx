@@ -47,7 +47,7 @@ const FilteredRidesPage = () => {
         <RidesSortAndFilter rides={rides} />
         <ul>
           {filteredRides!.map((ride) => (
-            <RideCard ride={ride} />
+            <RideCard key={ride.id} ride={ride} />
           ))}
         </ul>
       </>

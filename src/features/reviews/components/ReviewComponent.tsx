@@ -32,7 +32,7 @@ const ReviewComponent: React.FC<ReviewComponentProps> = ({
   };
 
   return (
-    <li key={review.id}>
+    <li>
       {review.id} | {review.comment} | {review.rating} | {review.createdAt}
       {onEdit && <Button label="Edit review" onClick={onEdit} />}
       {onDelete && (

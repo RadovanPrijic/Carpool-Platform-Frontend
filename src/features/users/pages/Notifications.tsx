@@ -70,7 +70,10 @@ const NotificationsPage = () => {
     content = (
       <ul>
         {notifications.map((notification) => (
-          <NotificationComponent notification={notification} />
+          <NotificationComponent
+            key={notification.id}
+            notification={notification}
+          />
         ))}
       </ul>
     );

@@ -8,7 +8,7 @@ const NotificationComponent: React.FC<NotificationComponentProps> = ({
   notification,
 }) => {
   return (
-    <li key={notification.id}>
+    <li>
       {notification.id} | {notification.message} |{" "}
       {notification.checkedStatus.toString()} | {notification.createdAt}
     </li>

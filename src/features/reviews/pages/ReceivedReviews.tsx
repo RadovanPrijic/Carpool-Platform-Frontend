@@ -25,7 +25,7 @@ const ReceivedReviewsPage = () => {
       <>
         <ul>
           {receivedReviews.map((review) => (
-            <ReviewComponent review={review} />
+            <ReviewComponent key={review.id} review={review} />
           ))}
         </ul>
       </>

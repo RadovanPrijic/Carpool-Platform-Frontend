@@ -103,7 +103,6 @@ const MessageComponent: React.FC<MessageComponentProps> = ({
 
   return (
     <div
-      key={message.id}
       className={
         classes[`message ${message.sender.id === userId ? "sent" : "received"}`]
       }
