@@ -9,12 +9,14 @@ interface LocationDropdownProps {
   label: string;
   setSelectedLocation: React.Dispatch<React.SetStateAction<string>>;
   defaultValue?: string;
+  validationErrorMessage?: string;
 }
 
 const LocationsDropdown: React.FC<LocationDropdownProps> = ({
   label,
   setSelectedLocation,
   defaultValue,
+  validationErrorMessage,
 }) => {
   const [filteredLocations, setFilteredLocations] = useState<Location[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>(defaultValue ?? "");
@@ -74,6 +76,7 @@ const LocationsDropdown: React.FC<LocationDropdownProps> = ({
           placeholder={`Search for ${label.toLowerCase()}...`}
           autoComplete="off"
           required
+          validationErrorMessage={validationErrorMessage}
         />
         {filteredLocations.length > 0 && (
           <ul className="dropdown-menu">

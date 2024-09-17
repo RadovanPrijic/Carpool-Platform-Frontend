@@ -9,6 +9,7 @@ import {
 import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import { useNavigation } from "react-router";
+import { errorActions } from "../../../store/error-slice";
 
 const ProfilePicturePage = () => {
   const userId = useAppSelector((state) => state.auth.userId);
@@ -26,6 +27,9 @@ const ProfilePicturePage = () => {
       setProfilePictureInput(null);
       dispatch(userActions.uploadProfilePicture(picture));
     },
+    onError: (error) => {
+      dispatch(errorActions.setError(error.message));
+    },
   });
 
   const { mutate: tryDeleteProfilePicture } = useMutation({
@@ -34,7 +38,7 @@ const ProfilePicturePage = () => {
       dispatch(userActions.deleteProfilePicture());
     },
     onError: (error) => {
-      console.log(error.message);
+      dispatch(errorActions.setError(error.message));
     },
   });
 

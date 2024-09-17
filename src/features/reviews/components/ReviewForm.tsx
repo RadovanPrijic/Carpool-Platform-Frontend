@@ -3,6 +3,7 @@ import Button from "../../../components/Button";
 import Input from "../../../components/Input";
 import Textarea from "../../../components/Textarea";
 import { useNavigation } from "react-router";
+import { ValidationErrorResponse } from "../../../utils/http";
 
 interface ReviewFormProps {
   rating: number;
@@ -12,6 +13,7 @@ interface ReviewFormProps {
   onChange: (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
+  validation?: ValidationErrorResponse | null;
 }
 
 const ReviewForm: React.FC<ReviewFormProps> = ({
@@ -20,6 +22,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   type,
   onSubmit,
   onChange,
+  validation,
 }) => {
   const navigation = useNavigation();
 
@@ -36,6 +39,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         onChange={onChange}
         placeholder="Choose your rating ..."
         required
+        validationErrorMessage={validation?.errors.Rating[0]}
       />
       <Textarea
         label="Comment"
@@ -45,6 +49,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         maxLength={1000}
         onChange={onChange}
         placeholder="Enter your comment ..."
+        validationErrorMessage={validation?.errors.Comment[0]}
       />
       <Button
         type="submit"

@@ -43,6 +43,9 @@ const SingleRidePage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ride-bookings", params.id] });
     },
+    onError: (error) => {
+      dispatch(errorActions.setError(error.message));
+    },
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,16 +87,14 @@ const SingleRidePage = () => {
             label="Delete ride"
             onClick={() => deleteModalRef.current!.open()}
           />
-          <div>
-            <Modal
-              title="Review deletion"
-              ref={deleteModalRef}
-              onCancel={() => deleteModalRef.current!.close()}
-              onConfirm={handleConfirmDelete}
-            >
-              <p>Are you sure you want to delete this review?</p>
-            </Modal>
-          </div>
+          <Modal
+            title="Ride deletion"
+            ref={deleteModalRef}
+            onCancel={() => deleteModalRef.current!.close()}
+            onConfirm={handleConfirmDelete}
+          >
+            <p>Are you sure you want to delete this ride?</p>
+          </Modal>
         </>
       )}
       {isAuthenticated &&
@@ -106,30 +107,30 @@ const SingleRidePage = () => {
               label="Book ride"
               onClick={() => bookingmodalRef.current!.open()}
             />
-            <div>
-              <Modal
-                title="Ride booking"
-                ref={bookingmodalRef}
-                onCancel={() => bookingmodalRef.current!.close()}
-                onConfirm={() =>
-                  handleConfirmBooking(
-                    ride.pricePerSeat * numberOfSeats,
-                    userId,
-                    ride.id
-                  )
-                }
-              >
-                <Input
-                  label="Number of seats"
-                  id="seats"
-                  name="seats"
-                  type="number"
-                  value={numberOfSeats}
-                  onChange={handleInputChange}
-                  required
-                />
-              </Modal>
-            </div>
+            <Modal
+              title="Ride booking"
+              ref={bookingmodalRef}
+              onCancel={() => bookingmodalRef.current!.close()}
+              onConfirm={() =>
+                handleConfirmBooking(
+                  ride.pricePerSeat * numberOfSeats,
+                  userId,
+                  ride.id
+                )
+              }
+            >
+              <Input
+                label="Number of seats"
+                id="seats"
+                name="seats"
+                type="number"
+                value={numberOfSeats}
+                min={1}
+                max={4}
+                onChange={handleInputChange}
+                required
+              />
+            </Modal>
           </>
         )}
     </div>

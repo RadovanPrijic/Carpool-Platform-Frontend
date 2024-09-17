@@ -5,6 +5,7 @@ import Textarea from "../../../components/Textarea";
 import LocationsDropdown from "./LocationsDropdown";
 import Dropdown from "../../../components/Dropdown";
 import { useNavigation } from "react-router";
+import { ValidationErrorResponse } from "../../../utils/http";
 
 interface RideFormProps {
   startLocation?: string;
@@ -27,6 +28,7 @@ interface RideFormProps {
     >
   ) => void;
   formType: "Create" | "Edit";
+  validation?: ValidationErrorResponse | null;
 }
 
 const RideForm: React.FC<RideFormProps> = ({
@@ -46,6 +48,7 @@ const RideForm: React.FC<RideFormProps> = ({
   onSubmit,
   onChange,
   formType,
+  validation,
 }) => {
   const navigation = useNavigation();
 
@@ -55,11 +58,13 @@ const RideForm: React.FC<RideFormProps> = ({
         label="Starting Location"
         setSelectedLocation={setStartLocation}
         defaultValue={startLocation}
+        validationErrorMessage={validation?.errors.StartLocation[0]}
       />
       <LocationsDropdown
         label="End Location"
         setSelectedLocation={setEndLocation}
         defaultValue={endLocation}
+        validationErrorMessage={validation?.errors.EndLocation[0]}
       />
       <Input
         label="Departure time"
@@ -69,6 +74,7 @@ const RideForm: React.FC<RideFormProps> = ({
         value={departureTime}
         onChange={onChange}
         required
+        validationErrorMessage={validation?.errors.DepartureTime[0]}
       />
       <Input
         label="Price per seat"
@@ -78,6 +84,7 @@ const RideForm: React.FC<RideFormProps> = ({
         value={pricePerSeat}
         onChange={onChange}
         required
+        validationErrorMessage={validation?.errors.PricePerSeat[0]}
       />
       <Input
         label="Seats available"
@@ -89,15 +96,17 @@ const RideForm: React.FC<RideFormProps> = ({
         max={4}
         onChange={onChange}
         required
+        validationErrorMessage={validation?.errors.SeatsAvailable[0]}
       />
       <Input
         label="Two in Backseat"
         id="two-in-backseat"
         name="twoInBackseat"
         type="checkbox"
-        value={twoInBackseat}
+        value={twoInBackseat.toString()}
         checked={twoInBackseat}
         onChange={onChange}
+        validationErrorMessage={validation?.errors.TwoInBackseat[0]}
       />
       <Textarea
         label="Ride description (optional)"
@@ -107,6 +116,7 @@ const RideForm: React.FC<RideFormProps> = ({
         onChange={onChange}
         placeholder="Enter additional information about your ride ..."
         maxLength={500}
+        validationErrorMessage={validation?.errors.RideDescription[0]}
       />
       <Textarea
         label="Car information"
@@ -117,6 +127,7 @@ const RideForm: React.FC<RideFormProps> = ({
         maxLength={250}
         placeholder="Enter information about your car ..."
         required
+        validationErrorMessage={validation?.errors.CarInformation[0]}
       />
       <Dropdown
         label="Luggage Size"
@@ -135,24 +146,27 @@ const RideForm: React.FC<RideFormProps> = ({
             value: "Large",
           },
         ]}
+        validationErrorMessage={validation?.errors.LuggageSize[0]}
       />
       <Input
         label="Insurance status"
         id="insurance-status"
         name="insuranceStatus"
         type="checkbox"
-        value={insuranceStatus}
+        value={insuranceStatus.toString()}
         checked={insuranceStatus}
         onChange={onChange}
+        validationErrorMessage={validation?.errors.InsuranceStatus[0]}
       />
       <Input
         label="Automatic Booking"
         id="automatic-booking"
         name="automaticBooking"
         type="checkbox"
-        value={automaticBooking}
+        value={automaticBooking.toString()}
         checked={automaticBooking}
         onChange={onChange}
+        validationErrorMessage={validation?.errors.AutomaticBooking[0]}
       />
       <Button
         type="submit"

@@ -7,16 +7,19 @@ import {
   sendMessage,
 } from "../../../services/message-service";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useAppSelector } from "../../../hooks/store-hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { queryClient } from "../../../utils/api-config";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
 import MessageComponent from "../components/Message";
+import { ValidationError } from "../../../utils/http";
+import { errorActions } from "../../../store/error-slice";
 
 const ChatPage = () => {
   const userId = useAppSelector((state) => state.auth.userId);
   const [newMessage, setNewMessage] = useState<string>("");
   const chatEndRef = useRef<HTMLDivElement | null>(null);
+  const dispatch = useAppDispatch();
   const params = useParams();
 
   const {
@@ -38,6 +41,15 @@ const ChatPage = () => {
       queryClient.invalidateQueries({
         queryKey: ["conversation-messages", userId, params.id],
       });
+    },
+    onError: (error) => {
+      if (error instanceof ValidationError) {
+        dispatch(
+          errorActions.setError(error.validationErrors.errors.Content[0])
+        );
+      } else {
+        dispatch(errorActions.setError(error.message));
+      }
     },
   });
 

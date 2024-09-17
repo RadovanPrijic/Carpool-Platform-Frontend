@@ -1,10 +1,12 @@
 import { useState } from "react";
-import { useAppSelector } from "../../../hooks/store-hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { RideCreateDTO } from "../types";
 import { useMutation } from "@tanstack/react-query";
 import { createRide } from "../../../services/ride-service";
 import { queryClient } from "../../../utils/api-config";
 import RideForm from "../components/RideForm";
+import { ValidationError, ValidationErrorResponse } from "../../../utils/http";
+import { errorActions } from "../../../store/error-slice";
 
 const NewRidePage = () => {
   const userId = useAppSelector((state) => state.auth.userId);
@@ -25,12 +27,23 @@ const NewRidePage = () => {
     userId: userId,
   };
   const [formData, setFormData] = useState<RideCreateDTO>(initialFormData);
+  const [validation, setValidation] = useState<ValidationErrorResponse | null>(
+    null
+  );
+  const dispatch = useAppDispatch();
 
   const { mutate: tryCreateRide } = useMutation({
     mutationFn: createRide,
     onSuccess: () => {
       setFormData(initialFormData);
       queryClient.invalidateQueries({ queryKey: ["user-rides", userId] });
+    },
+    onError: (error) => {
+      if (error instanceof ValidationError) {
+        setValidation(error.validationErrors);
+      } else {
+        dispatch(errorActions.setError(error.message));
+      }
     },
   });
 
@@ -69,6 +82,7 @@ const NewRidePage = () => {
       onSubmit={handleSubmit}
       onChange={handleInputChange}
       formType="Create"
+      validation={validation}
     />
   );
 };

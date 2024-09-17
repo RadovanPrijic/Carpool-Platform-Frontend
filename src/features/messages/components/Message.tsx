@@ -4,10 +4,12 @@ import { useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { updateMessage } from "../../../services/message-service";
 import { queryClient } from "../../../utils/api-config";
-import { useAppSelector } from "../../../hooks/store-hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import Modal, { ModalHandle } from "../../../components/Modal";
 import Button from "../../../components/Button";
 import Textarea from "../../../components/Textarea";
+import { errorActions } from "../../../store/error-slice";
+import { ValidationError } from "../../../utils/http";
 
 interface MessageComponentProps {
   message: Message;
@@ -24,6 +26,7 @@ const MessageComponent: React.FC<MessageComponentProps> = ({
   const [removeMessageId, setRemoveMessageId] = useState<number | null>(null);
   const editModalRef = useRef<ModalHandle>(null);
   const deleteModalRef = useRef<ModalHandle>(null);
+  const dispatch = useAppDispatch();
 
   const { mutate: tryUpdateMessage } = useMutation({
     mutationFn: updateMessage,
@@ -34,6 +37,15 @@ const MessageComponent: React.FC<MessageComponentProps> = ({
       queryClient.invalidateQueries({
         queryKey: ["conversation-messages", userId, receiverId],
       });
+    },
+    onError: (error) => {
+      if (error instanceof ValidationError) {
+        dispatch(
+          errorActions.setError(error.validationErrors.errors.Content[0])
+        );
+      } else {
+        dispatch(errorActions.setError(error.message));
+      }
     },
   });
 
@@ -115,34 +127,30 @@ const MessageComponent: React.FC<MessageComponentProps> = ({
             )}
           </>
         )}
-        <div>
-          <Modal
-            title="Message update"
-            ref={editModalRef}
-            onCancel={() => closeModal("edit")}
-            onConfirm={() => handleEdit()}
-          >
-            <Textarea
-              label="Edit message content"
-              id="message"
-              name="message"
-              value={messageEdit}
-              onChange={handleInputChange}
-              placeholder="Edit your message ..."
-              required
-            />
-          </Modal>
-        </div>
-        <div>
-          <Modal
-            title="Message deletion"
-            ref={deleteModalRef}
-            onCancel={() => closeModal("delete")}
-            onConfirm={() => handleDelete()}
-          >
-            <p>Are you sure you want to delete this message?</p>
-          </Modal>
-        </div>
+        <Modal
+          title="Message update"
+          ref={editModalRef}
+          onCancel={() => closeModal("edit")}
+          onConfirm={() => handleEdit()}
+        >
+          <Textarea
+            label="Edit message content"
+            id="message"
+            name="message"
+            value={messageEdit}
+            onChange={handleInputChange}
+            placeholder="Edit your message ..."
+            required
+          />
+        </Modal>
+        <Modal
+          title="Message deletion"
+          ref={deleteModalRef}
+          onCancel={() => closeModal("delete")}
+          onConfirm={() => handleDelete()}
+        >
+          <p>Are you sure you want to delete this message?</p>
+        </Modal>
       </div>
       <span className={classes["timestamp"]}>{message.createdAt}</span>
     </div>

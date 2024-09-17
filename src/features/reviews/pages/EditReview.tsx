@@ -3,9 +3,11 @@ import { updateReview } from "../../../services/review-service";
 import { useLoaderData, useParams } from "react-router";
 import { Review, ReviewUpdateDTO } from "../types";
 import { useState } from "react";
-import { useAppSelector } from "../../../hooks/store-hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { queryClient } from "../../../utils/api-config";
 import ReviewForm from "../components/ReviewForm";
+import { ValidationError, ValidationErrorResponse } from "../../../utils/http";
+import { errorActions } from "../../../store/error-slice";
 
 const EditReviewPage = () => {
   const review = useLoaderData() as Review;
@@ -13,7 +15,11 @@ const EditReviewPage = () => {
     rating: review.rating,
     comment: review.comment,
   });
+  const [validation, setValidation] = useState<ValidationErrorResponse | null>(
+    null
+  );
   const userId = useAppSelector((state) => state.auth.userId);
+  const dispatch = useAppDispatch();
   const params = useParams();
 
   const { mutate: tryUpdateReview } = useMutation({
@@ -25,6 +31,13 @@ const EditReviewPage = () => {
       queryClient.invalidateQueries({
         queryKey: ["given-reviews", userId, true],
       });
+    },
+    onError: (error) => {
+      if (error instanceof ValidationError) {
+        setValidation(error.validationErrors);
+      } else {
+        dispatch(errorActions.setError(error.message));
+      }
     },
   });
 
@@ -50,6 +63,7 @@ const EditReviewPage = () => {
       type="update"
       onChange={handleInputChange}
       onSubmit={handleUpdateReview}
+      validation={validation}
     />
   );
 };

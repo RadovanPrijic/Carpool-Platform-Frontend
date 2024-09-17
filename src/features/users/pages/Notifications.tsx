@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { queryClient } from "../../../utils/api-config";
 import { userActions } from "../user-slice";
 import NotificationComponent from "../components/Notification";
+import { errorActions } from "../../../store/error-slice";
 
 const NotificationsPage = () => {
   const userId = useAppSelector((state) => state.auth.userId);
@@ -27,6 +28,9 @@ const NotificationsPage = () => {
         queryKey: ["notifications", { id: userId, markAsChecked: false }],
       });
       dispatch(userActions.updateUserNotifications(updatedNotifications));
+    },
+    onError: (error) => {
+      dispatch(errorActions.setError(error.message));
     },
   });
 

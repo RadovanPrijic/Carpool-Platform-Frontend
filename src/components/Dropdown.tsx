@@ -15,6 +15,8 @@ interface DropdownProps {
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   placeholder?: string;
   disabled?: boolean;
+  validationErrorMessage?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [key: string]: any;
 }
 
@@ -27,6 +29,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   onChange,
   placeholder = "Select an option",
   disabled = false,
+  validationErrorMessage,
   ...rest
 }) => {
   return (
@@ -48,6 +51,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           </option>
         ))}
       </select>
+      {validationErrorMessage && <p>{validationErrorMessage}</p>}
     </div>
   );
 };

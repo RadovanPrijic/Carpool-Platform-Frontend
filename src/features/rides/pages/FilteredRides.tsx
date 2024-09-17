@@ -6,6 +6,7 @@ import RidesSortAndFilter from "../components/RidesSortAndFilter";
 import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { ridesActions } from "../rides-slice";
 import RideCard from "../components/RideCard";
+import { errorActions } from "../../../store/error-slice";
 
 const FilteredRidesPage = () => {
   const rides = useAppSelector((state) => state.rides.rides);
@@ -25,6 +26,9 @@ const FilteredRidesPage = () => {
     mutationFn: getFilteredRides,
     onSuccess: (responseRides) => {
       dispatch(ridesActions.setRides(responseRides));
+    },
+    onError: (error) => {
+      dispatch(errorActions.setError(error.message));
     },
   });
 

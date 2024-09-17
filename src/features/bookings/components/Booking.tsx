@@ -5,13 +5,15 @@ import { useNavigate } from "react-router";
 import { useMutation } from "@tanstack/react-query";
 import { sendMessage } from "../../../services/message-service";
 import { queryClient } from "../../../utils/api-config";
-import { useAppSelector } from "../../../hooks/store-hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import {
   cancelBooking,
   updateBooking,
 } from "../../../services/booking-service";
 import Button from "../../../components/Button";
 import Textarea from "../../../components/Textarea";
+import { errorActions } from "../../../store/error-slice";
+import { ValidationError, ValidationErrorResponse } from "../../../utils/http";
 
 interface BookingComponentProps {
   booking: Booking;
@@ -24,7 +26,11 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
 }) => {
   const userId = useAppSelector((state) => state.auth.userId);
   const [messageContent, setMessageContent] = useState<string>("");
+  const [validation, setValidation] = useState<ValidationErrorResponse | null>(
+    null
+  );
   const modalRef = useRef<ModalHandle>(null);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const { mutate: trySendMessage } = useMutation({
@@ -37,6 +43,13 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
         queryKey: ["conversation-messages", userId, sentMessage.receiver.id],
       });
     },
+    onError: (error) => {
+      if (error instanceof ValidationError) {
+        setValidation(error.validationErrors);
+      } else {
+        dispatch(errorActions.setError(error.message));
+      }
+    },
   });
 
   const { mutate: tryUpdateBooking } = useMutation({
@@ -46,6 +59,9 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
         queryKey: ["bookings", userId, filter],
       });
     },
+    onError: (error) => {
+      dispatch(errorActions.setError(error.message));
+    },
   });
 
   const { mutate: tryCancelBooking } = useMutation({
@@ -54,6 +70,9 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
       queryClient.invalidateQueries({
         queryKey: ["bookings", userId, filter],
       });
+    },
+    onError: (error) => {
+      dispatch(errorActions.setError(error.message));
     },
   });
 
@@ -71,7 +90,9 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
 
   const handleConfirm = (senderId: string, receiverId: string) => {
     trySendMessage({ content: messageContent, senderId, receiverId });
-    closeModal();
+    if (!validation) {
+      closeModal();
+    }
   };
 
   const handleNavigation = (id: number) => {
@@ -151,6 +172,7 @@ const BookingComponent: React.FC<BookingComponentProps> = ({
             onChange={handleInputChange}
             placeholder="Enter your message ..."
             required
+            validationErrorMessage={validation?.errors.Content[0]}
           />
         </Modal>
       </div>

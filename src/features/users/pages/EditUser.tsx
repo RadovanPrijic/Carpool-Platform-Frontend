@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
 import { useState } from "react";
 import { userActions } from "../user-slice";
 import UserForm from "../components/UserForm";
+import { ValidationError, ValidationErrorResponse } from "../../../utils/http";
+import { errorActions } from "../../../store/error-slice";
 
 const EditUserPage = () => {
   const currentUser = useAppSelector((state) => state.user.currentUser!);
@@ -23,12 +25,22 @@ const EditUserPage = () => {
     ...initialState
   } = currentUser;
   const [formData, setFormData] = useState<UserUpdateDTO>({ ...initialState });
+  const [validation, setValidation] = useState<ValidationErrorResponse | null>(
+    null
+  );
   const dispatch = useAppDispatch();
 
   const { mutate: tryUpdateUser } = useMutation({
     mutationFn: updateUser,
     onSuccess: (updatedUser) => {
       dispatch(userActions.setCurrentUser({ ...updatedUser }));
+    },
+    onError: (error) => {
+      if (error instanceof ValidationError) {
+        setValidation(error.validationErrors);
+      } else {
+        dispatch(errorActions.setError(error.message));
+      }
     },
   });
 
@@ -62,6 +74,7 @@ const EditUserPage = () => {
       petsPrefs={formData.petsPrefs}
       onSubmit={handleUpdateUser}
       onChange={handleInputChange}
+      validation={validation}
     />
   );
 };

@@ -6,11 +6,13 @@ import {
 } from "../../../services/review-service";
 import ReviewComponent from "../components/ReviewComponent";
 import { queryClient } from "../../../utils/api-config";
-import { useAppSelector } from "../../../hooks/store-hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/store-hooks";
+import { errorActions } from "../../../store/error-slice";
 
 const GivenReviewsPage = () => {
   const userId = useAppSelector((state) => state.auth.userId);
   const params = useParams();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const {
@@ -28,6 +30,9 @@ const GivenReviewsPage = () => {
       queryClient.invalidateQueries({
         queryKey: ["given-reviews", userId, true],
       });
+    },
+    onError: (error) => {
+      dispatch(errorActions.setError(error.message));
     },
   });
 

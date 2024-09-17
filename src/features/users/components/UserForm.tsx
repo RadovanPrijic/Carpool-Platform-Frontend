@@ -67,6 +67,8 @@ const UserForm: React.FC<UserFormProps> = ({
           name="password"
           type="password"
           value={password}
+          minLength={8}
+          maxLength={30}
           onChange={onChange}
           placeholder="Enter your password ..."
           required
@@ -142,6 +144,7 @@ const UserForm: React.FC<UserFormProps> = ({
             value: "I prefer silence while driving.",
           },
         ]}
+        validationErrorMessage={validation?.errors.ChattinessPrefs[0]}
       />
       <Dropdown
         label="Music preferences (optional)"
@@ -160,6 +163,7 @@ const UserForm: React.FC<UserFormProps> = ({
             value: "Silence is golden.",
           },
         ]}
+        validationErrorMessage={validation?.errors.MusicPrefs[0]}
       />
       <Dropdown
         label="Smoking preferences (optional)"
@@ -181,6 +185,7 @@ const UserForm: React.FC<UserFormProps> = ({
             value: "No smoking, please.",
           },
         ]}
+        validationErrorMessage={validation?.errors.SmokingPrefs[0]}
       />
       <Dropdown
         label="Pets preferences (optional)"
@@ -199,6 +204,7 @@ const UserForm: React.FC<UserFormProps> = ({
             value: "I prefer not to travel with pets.",
           },
         ]}
+        validationErrorMessage={validation?.errors.PetsPrefs[0]}
       />
       <Button
         type="submit"
