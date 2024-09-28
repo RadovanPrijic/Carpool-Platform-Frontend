@@ -3,6 +3,7 @@ import LocationsDropdown from "./LocationsDropdown";
 import { useNavigate, useNavigation } from "react-router";
 import Input from "../../../components/Input";
 import Button from "../../../components/Button";
+import "../../../../styles.css";
 
 const RidesSearch = () => {
   const [startLocation, setStartLocation] = useState<string>("");
@@ -56,6 +57,7 @@ const RidesSearch = () => {
         type="submit"
         label={navigation.state === "submitting" ? "Submitting ..." : "Search"}
         disabled={navigation.state === "submitting"}
+        className="btn--full"
       />
     </form>
   );

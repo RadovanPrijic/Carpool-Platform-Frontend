@@ -65,7 +65,7 @@ const LocationsDropdown: React.FC<LocationDropdownProps> = ({
     content = <p>Error!</p>;
   } else if (locations) {
     content = (
-      <div className="location-dropdown">
+      <div>
         <Input
           label={label}
           id="location"
@@ -76,19 +76,20 @@ const LocationsDropdown: React.FC<LocationDropdownProps> = ({
           placeholder={`Search for ${label.toLowerCase()}...`}
           autoComplete="off"
           required
+          list="filtered-locations-list"
           validationErrorMessage={validationErrorMessage}
         />
         {filteredLocations.length > 0 && (
-          <ul className="dropdown-menu">
+          <datalist id="filtered-locations-list">
             {filteredLocations.map((location) => (
-              <li
+              <option
                 key={location.id}
                 onClick={() => handleSelectLocation(location)}
               >
                 {location.city}, {location.country}
-              </li>
+              </option>
             ))}
-          </ul>
+          </datalist>
         )}
       </div>
     );

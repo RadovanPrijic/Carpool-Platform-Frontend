@@ -28,8 +28,10 @@ const Input: React.FC<InputProps> = ({
   ...rest
 }) => {
   return (
-    <div className="input-group">
-      <label htmlFor={id}>{label}</label>
+    <p>
+      <label htmlFor={id} className={classes.label}>
+        {label}
+      </label>
       <input
         id={id}
         name={name}
@@ -38,11 +40,11 @@ const Input: React.FC<InputProps> = ({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="input-field"
+        className={classes.input}
         {...rest}
       />
       {validationErrorMessage && <p>{validationErrorMessage}</p>}
-    </div>
+    </p>
   );
 };
 

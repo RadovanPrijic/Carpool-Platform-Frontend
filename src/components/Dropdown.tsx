@@ -33,26 +33,34 @@ const Dropdown: React.FC<DropdownProps> = ({
   ...rest
 }) => {
   return (
-    <div className={classes["dropdown-group"]}>
-      <label htmlFor={id}>{label}</label>
+    <p>
+      <label htmlFor={id} className={classes.label}>
+        {label}
+      </label>
       <select
         id={id}
         name={name}
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className={classes["dropdown"]}
+        className={classes.dropdown}
         {...rest}
       >
-        <option value="">{placeholder}</option>
+        <option value="" className={classes.option}>
+          {placeholder}
+        </option>
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option
+            key={option.value}
+            value={option.value}
+            className={classes.option}
+          >
             {option.label}
           </option>
         ))}
       </select>
       {validationErrorMessage && <p>{validationErrorMessage}</p>}
-    </div>
+    </p>
   );
 };
 

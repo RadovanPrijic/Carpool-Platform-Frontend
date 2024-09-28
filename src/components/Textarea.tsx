@@ -32,8 +32,10 @@ const Textarea: React.FC<TextareaProps> = ({
   ...rest
 }) => {
   return (
-    <div className="textarea-group">
-      <label htmlFor={id}>{label}</label>
+    <p>
+      <label htmlFor={id} className={classes.label}>
+        {label}
+      </label>
       <textarea
         id={id}
         name={name}
@@ -44,11 +46,11 @@ const Textarea: React.FC<TextareaProps> = ({
         rows={rows}
         cols={cols}
         disabled={disabled}
-        className="textarea-field"
+        className={classes.textarea}
         {...rest}
       />
       {validationErrorMessage && <p>{validationErrorMessage}</p>}
-    </div>
+    </p>
   );
 };
 
