@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 import { createPortal } from "react-dom";
-import classes from "./Modal.module.css";
+import classes from "./styles/Modal.module.css";
 import Button from "./Button";
 
 interface ModalProps {

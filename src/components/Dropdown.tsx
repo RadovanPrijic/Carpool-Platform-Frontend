@@ -1,5 +1,5 @@
 import React from "react";
-import classes from "./Dropdown.module.css";
+import classes from "./styles/Dropdown.module.css";
 
 interface Option {
   label: string;

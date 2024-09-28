@@ -1,4 +1,5 @@
 import React, { ChangeEvent } from "react";
+import classes from "./styles/Textarea.module.css";
 
 interface TextareaProps {
   label: string;

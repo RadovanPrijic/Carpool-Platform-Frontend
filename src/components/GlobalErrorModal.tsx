@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/store-hooks";
 import { errorActions } from "../store/error-slice";
 import Button from "./Button";
-import classes from "./Modal.module.css";
+import classes from "./styles/Modal.module.css";
 import { createPortal } from "react-dom";
 
 const GlobalErrorModal: React.FC = () => {
